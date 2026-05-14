@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
   
-  <!-- مكتبة الخرائط التفاعلية Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -166,7 +165,7 @@
 </head>
 <body>
 
-  <div id="splash" onclick="document.getElementById('splash').classList.add('hide');">
+  <div id="splash">
     <div class="splash-rocket">🚀</div>
     <div class="splash-text">Mr Mahmoud Delivery</div>
   </div>
@@ -271,11 +270,10 @@
 
       <div id="formCard" class="glass rounded-[35px] p-8 md:p-12 glow hidden-soft">
         
-        <!-- [تعديل]: إظهار كود الموظف المسحوب من صفحة الدخول -->
         <div class="glass rounded-3xl p-6 border border-purple-500/30 mb-6 text-center">
           <h3 class="text-lg font-black text-cyan-400 mb-2">👨‍💻 الموظف المسئول عن الطلب</h3>
           <div id="empDisplay" class="text-3xl font-bold text-white bg-black/30 inline-block px-6 py-2 rounded-xl">جاري التحميل...</div>
-          <p class="text-xs text-slate-400 mt-2">تم سحب الكود تلقائياً.</p>
+          <p class="text-xs text-slate-400 mt-2">تم سحب الكود تلقائياً بناءً على الشيفت المفتوح.</p>
         </div>
 
         <div class="mb-10 flex items-start justify-between gap-5 flex-wrap">
@@ -286,7 +284,6 @@
           <button type="button" onclick="resetSelection()" class="rounded-2xl glass px-5 py-3 font-black hover:bg-black/10 transition" data-i18n="btnBack">رجوع للخدمات</button>
         </div>
 
-        <!-- أداة البحث عن طلب قديم (تظهر في حالة التعديل والإلغاء) -->
         <div id="searchOrderBox" class="glass rounded-2xl p-5 mb-8 hidden-soft border border-gold">
           <h3 class="text-lg font-black text-gold mb-3" data-i18n="lblSearchOrder">أدخل رقم الطلب لاسترجاع بياناتك:</h3>
           <div class="flex gap-3">
@@ -322,7 +319,6 @@
             </div>
           </div>
 
-          <!-- موقع التسليم -->
           <div class="glass rounded-3xl p-6">
             <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
               <div>
@@ -333,19 +329,17 @@
               </button>
             </div>
             
-            <!-- [تعديل]: لوحة إرشادية بدلاً من الخريطة المدمجة -->
             <div class="info-note rounded-xl px-4 py-3 mb-3 text-sm font-bold text-center">
-               💡 للحصول على موقع دقيق 100%: <br>
-               1. اضغط على زر "فتح خرائط جوجل"<br>
-               2. حدد مكانك وانسخ الرابط<br>
-               3. الصق الرابط في خانة العنوان بالأسفل
+                💡 للحصول على موقع دقيق 100%: <br>
+                1. اضغط على زر "فتح خرائط جوجل"<br>
+                2. حدد مكانك وانسخ الرابط<br>
+                3. الصق الرابط في خانة العنوان بالأسفل
             </div>
             
             <input type="text" id="address" class="input-field mt-3" placeholder="الصق رابط جوجل ماب أو اكتب العنوان..." />
             <div id="addressError" class="error-hint" data-i18n="errAddress">اكتب عنواناً واضحاً أو الصق الرابط.</div>
           </div>
 
-          <!-- موقع الاستلام -->
           <div class="glass rounded-3xl p-6" style="background: rgba(34,211,238,0.05); border: 1px dashed var(--cyan);">
             <label class="flex items-center gap-3 font-bold cursor-pointer mb-2">
               <input type="checkbox" id="hasPickup" onchange="togglePickupSection()" style="width:18px; height:18px;" />
@@ -365,7 +359,6 @@
             </div>
           </div>
 
-          <!-- التاريخ والوقت -->
           <div class="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-6 items-start">
             <div class="glass rounded-3xl p-6">
               <h3 class="text-2xl font-bold mb-5" data-i18n="dateTimeTitle">التاريخ والوقت</h3>
@@ -396,7 +389,6 @@
 
           <div id="dynamicFields" class="glass rounded-3xl p-6"></div>
 
-          <!-- العربون -->
           <div class="deposit-banner rounded-3xl p-6">
             <h3 class="text-2xl font-black mb-3" data-i18n="depositTitle">تنويه العربون</h3>
             <p class="text-slate-200 leading-8 font-bold">
@@ -404,13 +396,11 @@
             </p>
             <div class="mt-5">
               <label class="block mb-3 font-bold" data-i18n="labelDeposit">قيمة العربون المرسل</label>
-              <!-- [تعديل]: منع الحروف في خانة العربون -->
               <input type="text" id="depositAmount" class="input-field" placeholder="مثال: 100" oninput="onlyDigits(this)" />
               <div id="depositAmountError" class="error-hint" data-i18n="errDeposit">اكتب قيمة العربون بالأرقام.</div>
             </div>
           </div>
 
-          <!-- طريقة الدفع -->
           <div>
             <h3 class="text-2xl font-bold mb-6" data-i18n="paymentTitle">طريقة الدفع</h3>
             <div id="paymentsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
@@ -426,7 +416,6 @@
             <div id="ussdCodeDisplay" class="ussd-code text-center"></div>
           </div>
 
-          <!-- [تعديل]: رفع إثبات الدفع (Screenshot) -->
           <div id="paymentProofBox" class="glass rounded-3xl p-8 text-center border-2 border-dashed border-white/10 hidden-soft">
             <div class="text-6xl mb-4">📎</div>
             <h4 class="text-2xl font-bold mb-3">رفع Screenshot إثبات الدفع</h4>
@@ -453,7 +442,6 @@
       </div>
     </section>
 
-    <!-- شاشة التحميل -->
     <section id="loadingBox" class="hidden-soft max-w-3xl mx-auto px-6 pb-14">
       <div class="glass rounded-[35px] p-10 glow text-center fade-up">
         <div class="loader-luxury"></div>
@@ -462,7 +450,6 @@
       </div>
     </section>
 
-    <!-- الفاتورة (الوصل النهائي) -->
     <section id="receipt" class="hidden-soft max-w-5xl mx-auto px-6 pb-24">
       <div class="glass rounded-[35px] p-8 md:p-10 glow fade-up">
         <div class="success-check">
@@ -488,20 +475,39 @@
   </main>
 
   <script>
-    // ⚠️ رابط السكربت ⚠️
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxq291mGq_Z_h9bsI7k_lNdUmEO-uGLxjwf3_aL-kH_cWX9pQ4d2C2NG_4lpt9QzbXi/exec"; 
     const WHATSAPP_PHONE = "201122750229";
 
-    // [تعديل]: سحب كود الموظف من الرابط أو تعيينه كـ Web افتراضياً
     const urlParams = new URLSearchParams(window.location.search);
-    let loggedInEmpCode = urlParams.get('emp') || 'W'; // حرف W يرمز لعميل ويب بدون موظف
+    let loggedInEmpCode = urlParams.get('emp'); 
     
-    window.addEventListener("load", () => {
+    // [التعديل]: سحب الكود من السيرفر عند فتح العميل للصفحة مباشرة
+    window.addEventListener("load", async () => {
+      if (!loggedInEmpCode) {
+        document.getElementById('empDisplay').innerText = "جاري البحث عن موظف متاح...";
+        try {
+          const response = await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "get_active_employee" })
+          });
+          const result = await response.json();
+          if (result.status === "success" && result.data) {
+            loggedInEmpCode = result.data;
+          } else {
+            loggedInEmpCode = "Admin";
+          }
+        } catch (error) {
+          loggedInEmpCode = "Admin";
+        }
+      }
+      
       document.getElementById('empDisplay').innerText = loggedInEmpCode;
+      
       setTimeout(() => {
         const splash = document.getElementById("splash");
         if (splash) splash.classList.add("hide");
-      }, 2000);
+      }, 500);
     });
 
     const i18n = {
@@ -577,7 +583,6 @@
       }
     }
 
-    // استعادة الكروت الأربعة
     const services = [
       { id: "delivery", title: "طلب توصيل", icon: "🚚", description: "استلام وتسليم مع متابعة.", preview: "تسليم سريع" },
       { id: "tracking", title: "متابعة وتعديل الطلب", icon: "📍", description: "ابحث برقم طلبك وعدل أي بيانات.", preview: "تعديل فوري" },
@@ -670,7 +675,6 @@
       els.introPanel.classList.remove("hidden-soft");
     }
 
-    // [تعديل]: فتح خرائط جوجل مباشرة للعميل للبحث اليدوي واللصق
     function openGoogleMapsDirectly(type) {
       window.open('https://www.google.com/maps', '_blank');
       alert("تم فتح خرائط جوجل. ابحث عن مكانك، انسخ الرابط والصقه في الخانة بالأسفل.");
@@ -696,7 +700,6 @@
       document.getElementById("paymentProofBox").classList.remove("hidden-soft");
     }
 
-    // [تعديل]: إزالة الصورة وكتابة كلمة "المبلغ" في الكود المخصص
     function selectWallet(name, btn) {
       document.querySelectorAll('.wallet-btn').forEach(el => el.classList.remove('active'));
       btn.classList.add('active');
@@ -707,7 +710,6 @@
 
     function initClockMarks() { document.getElementById("clockMarks").innerHTML = Array.from({ length: 12 }).map((_, i) => `<span style="transform: rotate(${i * 30}deg);"></span>`).join(""); }
     
-    // [تعديل]: ضبط الوقت والتاريخ افتراضياً على (الآن)
     function setInitialDateTime() {
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -730,7 +732,6 @@
       el.value = el.value.replace(/[^0-9]/g, "");
     }
 
-    // جلب بيانات طلب قديم لتعديله
     async function fetchOrderData() {
       const orderId = document.getElementById("searchOrderId").value.trim();
       const errEl = document.getElementById("searchOrderError");
@@ -775,7 +776,6 @@
       }
     }
 
-    // الحصول على بيانات الصورة (Base64)
     function getFileBase64(file) {
       return new Promise((resolve, reject) => {
         if (!file) return resolve({ name: "", base64: "" });
@@ -818,10 +818,8 @@
       checkVal("orderTime", "timeError", !time);
       if(!state.payment) { document.getElementById("paymentError").style.display="block"; hasErr = true; }
       
-      // إجبار المرفق على الإرسال
       if(!proof.files.length) { checkVal("paymentProof", "paymentProofError", true); }
 
-      // [تعديل]: التمرير التلقائي لأول خطأ (Auto-Scroll to Error)
       if (hasErr) {
         const firstErr = document.querySelector('.error-hint[style*="block"]');
         if(firstErr) firstErr.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -842,7 +840,7 @@
         const payload = {
           action: actionType,
           orderId: document.getElementById("existingOrderId").value,
-          employeeLetter: loggedInEmpCode, // إرسال الكود المسحوب من الويب
+          employeeLetter: loggedInEmpCode, // إرسال الكود الذي تم التحقق منه
           name: name, phone: phone, altPhone: altPhone,
           address: document.getElementById("address").value,
           mapLink: document.getElementById("mapLink").value,
@@ -868,7 +866,6 @@
         document.getElementById("receiptMainTitle").innerText = mainTitle;
         document.getElementById("orderId").innerText = finalId;
         
-        // عرض كافة البيانات المدخلة في صفحة الفاتورة بما فيها اسم الملف
         let detailsHtml = `
           <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">العميل</div><div class="font-bold text-lg">${name}</div></div>
           <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الهاتف</div><div class="font-bold text-lg text-emerald-400">${phone}</div></div>
