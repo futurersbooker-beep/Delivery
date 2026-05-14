@@ -11,6 +11,7 @@
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <script>
     const themes = ["aurora", "ocean", "violet", "emerald"];
@@ -86,9 +87,9 @@
     .menu-panel.show { display: grid; }
     .theme-dot { width: 28px; height: 28px; border-radius: 999px; border: 2px solid rgba(255,255,255,.65); cursor: pointer; transition: .2s ease; }
     .theme-dot:hover { transform: scale(1.12); }
-    .themed-button { background: var(--accent-gradient); color: #06101e; box-shadow: 0 0 30px color-mix(in srgb, var(--cyan) 28%, transparent); }
+    .themed-button { background: var(--accent-gradient); color: #06101e; box-shadow: 0 0 30px color-mix(in srgb, var(--cyan) 28%, transparent); border: none; cursor:pointer;}
     .themed-button:hover { box-shadow: 0 0 42px color-mix(in srgb, var(--purple) 32%, transparent); }
-    .themed-outline { border: 1px solid color-mix(in srgb, var(--cyan) 34%, transparent); color: color-mix(in srgb, var(--cyan) 80%, white); background: color-mix(in srgb, var(--cyan) 13%, transparent); }
+    .themed-outline { border: 1px solid color-mix(in srgb, var(--cyan) 34%, transparent); color: color-mix(in srgb, var(--cyan) 80%, white); background: color-mix(in srgb, var(--cyan) 13%, transparent); cursor:pointer;}
     [data-mode="light"] .themed-outline { color: var(--cyan); background: rgba(34,211,238,0.1); }
     .themed-gradient-text { background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
     
@@ -97,24 +98,27 @@
     .nylon-lamp { background: linear-gradient(145deg, rgba(34,211,238,.11), rgba(168,85,247,.08)), radial-gradient(circle at 20% 20%, rgba(255,255,255,.16), transparent 28%); box-shadow: inset 0 0 50px rgba(255,255,255,.05), 0 22px 70px rgba(34,211,238,.13); }
     [data-mode="light"] .nylon-lamp { background: rgba(255,255,255,0.8); box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
     
+    /* فواصل نيون حديثة */
     .glowing-divider {
-      height: 2px; border: none; width: 80%; margin: 30px auto; border-radius: 50%;
-      background: var(--accent-gradient);
-      box-shadow: 0 0 15px var(--cyan), 0 0 30px var(--purple); opacity: 0.7;
+      height: 3px; border: none; width: 85%; margin: 40px auto; border-radius: 50%;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
+      box-shadow: 0 0 20px var(--cyan), 0 0 40px var(--purple); opacity: 0.9;
     }
 
     .service-card, .payment-card { transform-style: preserve-3d; transition: transform .75s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .3s; }
     .service-card:hover, .service-card.selected { transform: translateY(-8px); border-color: rgba(34,211,238,.65); box-shadow: 0 18px 55px rgba(34,211,238,.16); }
-    .payment-shell { perspective: 1000px; min-height: 210px; }
+    .payment-shell { perspective: 1000px; min-height: 210px; cursor:pointer;}
     .payment-shell.selected .payment-card { transform: rotateY(180deg); }
     .card-face { backface-visibility: hidden; }
     .card-back { transform: rotateY(180deg); }
     
     .input-field { width: 100%; border-radius: 18px; background: rgba(15,23,42,.62); border: 1px solid rgba(255,255,255,.10); padding: 15px 18px; outline: none; color: var(--text-main); transition: .25s ease; }
     .input-field:focus { border-color: var(--cyan); box-shadow: 0 0 0 4px rgba(34,211,238,.08); }
-    .error-hint { display: none; color: var(--danger); font-size: .82rem; font-weight: 900; margin-top: .55rem; }
+    .error-hint { display: none; color: var(--danger); font-size: .85rem; font-weight: 900; margin-top: .55rem; }
     .field-invalid { border-color: rgba(251,113,133,.9) !important; box-shadow: 0 0 0 3px rgba(251,113,133,.10); }
     .info-note { color: #67e8f9; background: rgba(34,211,238,.08); border: 1px solid rgba(34,211,238,.18); }
+    
+    /* منع تلوين الأيقونات في الكالندر للمود المظلم */
     input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1); opacity: .85; }
     [data-mode="light"] input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
     
@@ -128,10 +132,9 @@
     .second-hand { width: 2px; height: 58px; background: var(--danger); margin-left: -1px; animation: tickGlow 1s infinite alternate; }
     
     .deposit-banner { background: linear-gradient(135deg, rgba(34,211,238,.10), rgba(168,85,247,.11)); border: 1px solid rgba(34,211,238,.22); box-shadow: inset 0 0 26px rgba(255,255,255,.03); }
-    .qr { width: 92px; height: 92px; margin: 0 auto 10px; border-radius: 12px; border: 8px solid white; object-fit: contain; background: white; }
     
     .wallet-networks { display: none; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
-    .wallet-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .wallet-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; color: var(--text-main); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;}
     .wallet-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
     .wallet-btn.active { border-color: var(--cyan); background: rgba(34,211,238,0.2); }
     .ussd-code { display: none; font-size: 1.5rem; font-weight: 900; color: var(--cyan); background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; margin-top: 15px; letter-spacing: 2px; }
@@ -140,19 +143,28 @@
     .loader-luxury::after { content: ""; position: absolute; inset: 10px; border-radius: 50%; background: var(--deep); border: 1px solid rgba(255,255,255,.1); }
     .success-check { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 20px; background: rgba(52,211,153,.12); border: 1px solid rgba(52,211,153,.35); box-shadow: 0 0 28px rgba(52,211,153,.22); animation: pop .55s cubic-bezier(.2,1.4,.4,1) both; }
     .success-check svg { width: 52px; height: 52px; stroke-dasharray: 60; stroke-dashoffset: 60; animation: drawCheck .75s .25s ease forwards; }
-    .warning-box { background: linear-gradient(135deg, rgba(239,68,68,.18), rgba(250,204,21,.10)); border: 2px solid rgba(248,113,113,.55); box-shadow: 0 0 38px rgba(239,68,68,.18); }
-    .whatsapp-danger { background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; box-shadow: 0 0 24px rgba(239,68,68,.45); animation: dangerPulse 1s infinite alternate, warningMove 1.6s ease-in-out infinite; }
-    .signature { text-align: center; margin-top: 24px; color: var(--gold); font-weight: 900; letter-spacing: 0; text-shadow: 0 0 18px rgba(250,204,21,.22); }
     
-    .map-container { height: 250px; width: 100%; border-radius: 16px; border: 2px solid var(--cyan); display: none; margin-top: 10px; z-index: 10; position:relative; }
+    .whatsapp-danger { background: linear-gradient(135deg, #25D366, #128C7E); color: white; box-shadow: 0 0 24px rgba(37,211,102,.45); animation: dangerPulse 1s infinite alternate, warningMove 1.6s ease-in-out infinite; }
     
+    /* Animation Delivery Footer */
+    .delivery-truck-bg {
+      position: fixed; bottom: 0; left: 0; width: 100%; height: 50px;
+      pointer-events: none; z-index: 0; opacity: 0.3; overflow: hidden;
+    }
+    .truck-icon {
+      position: absolute; bottom: 10px; font-size: 2rem;
+      animation: drive 12s linear infinite;
+    }
+    
+    @keyframes drive { 0% { right: -100px; transform: scaleX(-1); } 100% { right: 100vw; transform: scaleX(-1); } }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes tickGlow { from { opacity: .55; } to { opacity: 1; filter: drop-shadow(0 0 6px var(--danger)); } }
     @keyframes drawCheck { to { stroke-dashoffset: 0; } }
     @keyframes pop { from { opacity: 0; transform: scale(.86); } to { opacity: 1; transform: scale(1); } }
-    @keyframes dangerPulse { from { filter: brightness(.95); } to { filter: brightness(1.25); box-shadow: 0 0 38px rgba(239,68,68,.72); } }
+    @keyframes dangerPulse { from { filter: brightness(.95); } to { filter: brightness(1.25); box-shadow: 0 0 38px rgba(37,211,102,.72); } }
     @keyframes warningMove { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-4px) scale(1.018); } }
+    
     @media (max-width: 760px) {
       .desktop-nav { display: none; }
       .hero-title { font-size: 3rem; }
@@ -168,6 +180,10 @@
   <div id="splash">
     <div class="splash-rocket">🚀</div>
     <div class="splash-text">Mr Mahmoud Delivery</div>
+  </div>
+
+  <div class="delivery-truck-bg">
+    <div class="truck-icon">🚚 💨 📦</div>
   </div>
 
   <header class="site-header">
@@ -207,7 +223,7 @@
     </div>
   </header>
 
-  <main id="home">
+  <main id="home" class="relative z-10">
     <section class="max-w-7xl mx-auto px-6 pt-16 pb-10 text-center fade-up">
       <div class="w-24 h-24 rounded-3xl glass mx-auto flex items-center justify-center text-5xl glow mb-6">🚀</div>
       <h1 class="hero-title text-5xl md:text-7xl font-black leading-tight mb-6">
@@ -273,7 +289,7 @@
         <div class="glass rounded-3xl p-6 border border-purple-500/30 mb-6 text-center">
           <h3 class="text-lg font-black text-cyan-400 mb-2">👨‍💻 الموظف المسئول عن الطلب</h3>
           <div id="empDisplay" class="text-3xl font-bold text-white bg-black/30 inline-block px-6 py-2 rounded-xl">جاري التحميل...</div>
-          <p class="text-xs text-slate-400 mt-2">تم سحب الكود تلقائياً بناءً على الشيفت المفتوح.</p>
+          <p class="text-xs text-slate-400 mt-2" data-i18n="empSubtitle">تم سحب الكود تلقائياً بناءً على الشيفت المفتوح.</p>
         </div>
 
         <div class="mb-10 flex items-start justify-between gap-5 flex-wrap">
@@ -285,158 +301,155 @@
         </div>
 
         <div id="searchOrderBox" class="glass rounded-2xl p-5 mb-8 hidden-soft border border-gold">
-          <h3 class="text-lg font-black text-gold mb-3" data-i18n="lblSearchOrder">أدخل رقم الطلب لاسترجاع بياناتك:</h3>
+          <h3 class="text-lg font-black text-gold mb-3" data-i18n="lblSearchOrder">أدخل رقم الهاتف أو رقم الطلب:</h3>
           <div class="flex gap-3">
-            <input type="text" id="searchOrderId" class="input-field" placeholder="مثال: A01#">
+            <input type="text" id="searchOrderId" class="input-field" placeholder="رقم الهاتف أو كود الطلب...">
             <button type="button" class="themed-button px-6 rounded-xl font-bold" onclick="fetchOrderData()" data-i18n="btnSearch">بحث</button>
           </div>
-          <div id="searchOrderError" class="error-hint" data-i18n="errSearch">لم يتم العثور على الطلب. تأكد من الرقم وتواصل مع خدمة العملاء.</div>
+          <div id="searchOrderError" class="error-hint" data-i18n="errSearch">لم يتم العثور على الطلب. تأكد من الرقم.</div>
+        </div>
+
+        <div id="specialServiceBox" class="hidden-soft text-center py-10">
+          <h2 class="text-4xl font-black text-gold mb-4">خدمة خاصة ✨</h2>
+          <p class="text-slate-300 mb-8 font-bold text-lg" data-i18n="specialDesc">لطلبات الشراء الخاصة أو الاستفسارات، يرجى التواصل مع خدمة العملاء مباشرة لتلبية طلبك بأسرع وقت.</p>
+          <a href="https://wa.me/201122750229" target="_blank" class="whatsapp-danger rounded-3xl px-10 py-5 text-2xl font-black inline-block hover:scale-105 transition">
+            <i class="fa-brands fa-whatsapp"></i> <span data-i18n="btnWaSupport">تواصل مع خدمة العملاء الآن</span>
+          </a>
         </div>
 
         <form id="orderForm" class="space-y-8" novalidate>
-          <input type="hidden" id="selectedService" />
-          <input type="hidden" id="mapLink" />
-          <input type="hidden" id="pickupMapLink" />
-          <input type="hidden" id="existingOrderId" /> 
+          <div id="mainFormFields">
+            <input type="hidden" id="selectedService" />
+            <input type="hidden" id="mapLink" />
+            <input type="hidden" id="pickupMapLink" />
+            <input type="hidden" id="existingOrderId" /> 
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block mb-3 font-bold" data-i18n="labelName">الاسم بالكامل</label>
-              <input type="text" id="name" class="input-field" placeholder="باسم أشرف" />
-              <div id="nameError" class="error-hint" data-i18n="errName">الاسم لازم يكون ثنائي على الأقل</div>
-            </div>
-
-            <div>
-              <label class="block mb-3 font-bold" data-i18n="labelPhone">رقم الهاتف الأساسي</label>
-              <input type="tel" id="phone" maxlength="11" class="input-field" placeholder="01xxxxxxxxx" oninput="onlyDigits(this)" />
-              <div id="phoneError" class="error-hint" data-i18n="errPhone">رقم الهاتف لازم يكون 11 رقم.</div>
-            </div>
-
-            <div>
-              <label class="block mb-3 font-bold" data-i18n="labelAltPhone">رقم الهاتف البديل</label>
-              <input type="tel" id="altPhone" maxlength="11" class="input-field" placeholder="رقم بديل 11 رقم" oninput="onlyDigits(this)" />
-              <div id="altPhoneError" class="error-hint" data-i18n="errAltPhone">الرقم البديل مختلف ومكون من 11 رقم.</div>
-            </div>
-          </div>
-
-          <div class="glass rounded-3xl p-6">
-            <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <h3 class="text-2xl font-black" data-i18n="mapDeliveryTitle">مكان التسليم للعميل</h3>
+                <label class="block mb-3 font-bold" data-i18n="labelName">الاسم بالكامل</label>
+                <input type="text" id="name" class="input-field" placeholder="باسم أشرف" />
+                <div id="nameError" class="error-hint" data-i18n="errName">الاسم لازم يكون ثنائي على الأقل</div>
               </div>
-              <button type="button" onclick="openGoogleMapsDirectly('delivery')" class="rounded-2xl themed-button px-5 py-3 font-black transition">
-                <i class="fa-solid fa-map-location-dot"></i> <span>فتح خرائط جوجل</span>
-              </button>
-            </div>
-            
-            <div class="info-note rounded-xl px-4 py-3 mb-3 text-sm font-bold text-center">
-                💡 للحصول على موقع دقيق 100%: <br>
-                1. اضغط على زر "فتح خرائط جوجل"<br>
-                2. حدد مكانك وانسخ الرابط<br>
-                3. الصق الرابط في خانة العنوان بالأسفل
-            </div>
-            
-            <input type="text" id="address" class="input-field mt-3" placeholder="الصق رابط جوجل ماب أو اكتب العنوان..." />
-            <div id="addressError" class="error-hint" data-i18n="errAddress">اكتب عنواناً واضحاً أو الصق الرابط.</div>
-          </div>
 
-          <div class="glass rounded-3xl p-6" style="background: rgba(34,211,238,0.05); border: 1px dashed var(--cyan);">
-            <label class="flex items-center gap-3 font-bold cursor-pointer mb-2">
-              <input type="checkbox" id="hasPickup" onchange="togglePickupSection()" style="width:18px; height:18px;" />
-              <span data-i18n="checkPickup">المندوب هيستلم الحاجه من مكان تاني؟ (إضافة موقع استلام)</span>
-            </label>
-            
-            <div id="pickupSection" class="hidden-soft mt-4">
+              <div>
+                <label class="block mb-3 font-bold" data-i18n="labelPhone">رقم الهاتف الأساسي</label>
+                <input type="tel" id="phone" maxlength="11" class="input-field" placeholder="01xxxxxxxxx" oninput="onlyDigits(this)" />
+                <div id="phoneError" class="error-hint" data-i18n="errPhone">رقم الهاتف لازم يكون 11 رقم.</div>
+              </div>
+
+              <div>
+                <label class="block mb-3 font-bold" data-i18n="labelAltPhone">رقم الهاتف البديل</label>
+                <input type="tel" id="altPhone" maxlength="11" class="input-field" placeholder="رقم بديل 11 رقم" oninput="onlyDigits(this)" />
+                <div id="altPhoneError" class="error-hint" data-i18n="errAltPhone">لا يمكن إدخال نفس الرقم مرتين، يرجى إدخال رقم بديل مختلف.</div>
+              </div>
+            </div>
+
+            <div class="glass rounded-3xl p-6 mb-6">
               <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
                 <div>
-                  <h3 class="text-xl font-black text-cyan-500" data-i18n="mapPickupTitle">مكان استلام المندوب للطلب</h3>
+                  <h3 class="text-2xl font-black" data-i18n="mapDeliveryTitle">مكان التسليم للعميل</h3>
                 </div>
-                <button type="button" onclick="openGoogleMapsDirectly('pickup')" class="rounded-2xl themed-outline px-4 py-2 font-black transition text-sm">
-                  <i class="fa-solid fa-map-location-dot"></i> <span>فتح خرائط جوجل</span>
+                <button type="button" onclick="showMapGuide('delivery')" class="rounded-2xl themed-button px-5 py-3 font-black transition">
+                  <i class="fa-solid fa-map-location-dot"></i> <span data-i18n="btnOpenMapModal">فتح خرائط جوجل</span>
                 </button>
               </div>
-              <input type="text" id="pickupAddress" class="input-field mt-3" placeholder="الصق رابط جوجل ماب أو اكتب عنوان الاستلام..." />
+              
+              <input type="text" id="address" class="input-field mt-3" placeholder="الصق رابط جوجل ماب أو اكتب العنوان بالتفصيل..." />
+              <div id="addressFeedback" class="text-sm font-bold mt-2 hidden text-center"></div>
+              <div id="addressError" class="error-hint" data-i18n="errAddress">اكتب عنواناً واضحاً أو الصق الرابط.</div>
             </div>
-          </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-6 items-start">
-            <div class="glass rounded-3xl p-6">
-              <h3 class="text-2xl font-bold mb-5" data-i18n="dateTimeTitle">التاريخ والوقت</h3>
-              <div class="grid grid-cols-1 gap-5">
-                <div>
-                  <label class="block mb-3 font-bold" data-i18n="labelDate">التاريخ</label>
-                  <input type="date" id="orderDate" class="input-field" />
-                  <div id="dateError" class="error-hint" data-i18n="errDate">اختر تاريخ مناسب</div>
+            <div class="glass rounded-3xl p-6 mb-6" style="background: rgba(34,211,238,0.05); border: 1px dashed var(--cyan);">
+              <label class="flex items-center gap-3 font-bold cursor-pointer mb-2">
+                <input type="checkbox" id="hasPickup" onchange="togglePickupSection()" style="width:18px; height:18px;" />
+                <span data-i18n="checkPickup">المندوب هيستلم الحاجه من مكان تاني؟ (إضافة موقع استلام)</span>
+              </label>
+              
+              <div id="pickupSection" class="hidden-soft mt-4">
+                <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
+                  <div>
+                    <h3 class="text-xl font-black text-cyan-500" data-i18n="mapPickupTitle">مكان استلام المندوب للطلب</h3>
+                  </div>
+                  <button type="button" onclick="showMapGuide('pickup')" class="rounded-2xl themed-outline px-4 py-2 font-black transition text-sm">
+                    <i class="fa-solid fa-map-location-dot"></i> <span data-i18n="btnOpenMapModal">فتح خرائط جوجل</span>
+                  </button>
                 </div>
-                <div>
-                  <label class="block mb-3 font-bold" data-i18n="labelTime">الوقت</label>
-                  <input type="time" id="orderTime" class="input-field" />
-                  <div id="timeError" class="error-hint" data-i18n="errTime">اختر الوقت</div>
+                <input type="text" id="pickupAddress" class="input-field mt-3" placeholder="الصق رابط جوجل ماب أو اكتب عنوان الاستلام..." />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-6 items-start mb-6">
+              <div class="glass rounded-3xl p-6">
+                <h3 class="text-2xl font-bold mb-5" data-i18n="dateTimeTitle">التاريخ والوقت الحالي</h3>
+                <div class="grid grid-cols-1 gap-5">
+                  <div>
+                    <label class="block mb-3 font-bold" data-i18n="labelDate">التاريخ</label>
+                    <input type="date" id="orderDate" class="input-field" onkeydown="return false" />
+                    <div id="dateError" class="error-hint" data-i18n="errDate">اختر تاريخ مناسب</div>
+                  </div>
+                  <div>
+                    <label class="block mb-3 font-bold" data-i18n="labelTime">الوقت</label>
+                    <input type="time" id="orderTime" class="input-field" onkeydown="return false" />
+                    <div id="timeError" class="error-hint" data-i18n="errTime">اختر الوقت</div>
+                  </div>
+                </div>
+              </div>
+              <div class="glass rounded-3xl p-5 text-center">
+                <div class="text-cyan-500 font-black" data-i18n="chosenTime">الوقت الآن</div>
+                <div id="chosenTimeLabel" class="text-2xl font-black mt-2">--:--</div>
+                <div class="analog-clock">
+                  <div class="clock-mark" id="clockMarks"></div>
+                  <div id="hourHand" class="hand hour-hand"></div>
+                  <div id="minuteHand" class="hand minute-hand"></div>
+                  <div id="secondHand" class="hand second-hand"></div>
                 </div>
               </div>
             </div>
-            <div class="glass rounded-3xl p-5 text-center">
-              <div class="text-cyan-500 font-black" data-i18n="chosenTime">موعدك المختار</div>
-              <div id="chosenTimeLabel" class="text-2xl font-black mt-2">--:--</div>
-              <div class="analog-clock">
-                <div class="clock-mark" id="clockMarks"></div>
-                <div id="hourHand" class="hand hour-hand"></div>
-                <div id="minuteHand" class="hand minute-hand"></div>
-                <div id="secondHand" class="hand second-hand"></div>
+
+            <div class="deposit-banner rounded-3xl p-6 mb-6">
+              <h3 class="text-2xl font-black mb-3" data-i18n="depositTitle">تنويه العربون</h3>
+              <p class="text-slate-200 leading-8 font-bold" data-i18n="depositWarn">
+                تأكيد الحجز يتطلب دفع عربون من وسيلة الدفع المختارة، وبعدها رفع Screenshot لإثبات الدفع.
+              </p>
+              <div class="mt-5">
+                <label class="block mb-3 font-bold" data-i18n="labelDeposit">قيمة العربون المرسل (أرقام فقط)</label>
+                <input type="text" id="depositAmount" class="input-field" placeholder="مثال: 100" oninput="onlyDigits(this)" />
+                <div id="depositAmountError" class="error-hint" data-i18n="errDeposit">اكتب قيمة العربون بالأرقام فقط.</div>
               </div>
             </div>
-          </div>
 
-          <div id="dynamicFields" class="glass rounded-3xl p-6"></div>
-
-          <div class="deposit-banner rounded-3xl p-6">
-            <h3 class="text-2xl font-black mb-3" data-i18n="depositTitle">تنويه العربون</h3>
-            <p class="text-slate-200 leading-8 font-bold">
-              تأكيد الحجز يتطلب دفع عربون من وسيلة الدفع المختارة، وبعدها رفع Screenshot لإثبات الدفع.
-            </p>
-            <div class="mt-5">
-              <label class="block mb-3 font-bold" data-i18n="labelDeposit">قيمة العربون المرسل</label>
-              <input type="text" id="depositAmount" class="input-field" placeholder="مثال: 100" oninput="onlyDigits(this)" />
-              <div id="depositAmountError" class="error-hint" data-i18n="errDeposit">اكتب قيمة العربون بالأرقام.</div>
+            <div class="mb-6">
+              <h3 class="text-2xl font-bold mb-6" data-i18n="paymentTitle">طريقة الدفع</h3>
+              <div id="paymentsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+              <div id="paymentError" class="error-hint" data-i18n="errPayment">اختر طريقة الدفع أولًا</div>
+              
+              <div id="walletNetworks" class="wallet-networks">
+                <div class="wallet-btn" onclick="selectWallet('فودافون كاش', '*9*7*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-red-500 text-2xl"></i>فودافون كاش</div>
+                <div class="wallet-btn" onclick="selectWallet('اتصالات كاش', '*777*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-green-500 text-2xl"></i>اتصالات كاش</div>
+                <div class="wallet-btn" onclick="selectWallet('أورانج كاش', '#115*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-orange-500 text-2xl"></i>أورانج كاش</div>
+                <div class="wallet-btn" onclick="selectWallet('وي باي', '*322*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-purple-500 text-2xl"></i>وي باي</div>
+              </div>
+              
+              <div id="ussdCodeDisplay" class="ussd-code text-center"></div>
             </div>
-          </div>
 
-          <div>
-            <h3 class="text-2xl font-bold mb-6" data-i18n="paymentTitle">طريقة الدفع</h3>
-            <div id="paymentsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
-            <div id="paymentError" class="error-hint" data-i18n="errPayment">اختر طريقة الدفع أولًا</div>
-            
-            <div id="walletNetworks" class="wallet-networks">
-              <div class="wallet-btn" onclick="selectWallet('فودافون كاش', this)">فودافون كاش</div>
-              <div class="wallet-btn" onclick="selectWallet('اتصالات كاش', this)">اتصالات كاش</div>
-              <div class="wallet-btn" onclick="selectWallet('أورانج كاش', this)">أورانج كاش</div>
-              <div class="wallet-btn" onclick="selectWallet('وي باي', this)">وي باي</div>
+            <div id="paymentProofBox" class="glass rounded-3xl p-8 text-center border-2 border-dashed border-white/10 hidden-soft mb-6">
+              <div class="text-6xl mb-4">📎</div>
+              <h4 class="text-2xl font-bold mb-3" data-i18n="lblProof">رفع Screenshot إثبات الدفع</h4>
+              <p class="text-slate-400 mb-5" data-i18n="lblProofDesc">رفع صورة الدفع إجباري بعد اختيار وسيلة الدفع.</p>
+              <input type="file" id="paymentProof" accept="image/*" class="block mx-auto text-sm text-slate-300" />
+              <div id="paymentProofError" class="error-hint" data-i18n="errProof">لا يمكن تأكيد الطلب بدون صورة إثبات الدفع</div>
             </div>
-            
-            <div id="ussdCodeDisplay" class="ussd-code text-center"></div>
-          </div>
 
-          <div id="paymentProofBox" class="glass rounded-3xl p-8 text-center border-2 border-dashed border-white/10 hidden-soft">
-            <div class="text-6xl mb-4">📎</div>
-            <h4 class="text-2xl font-bold mb-3">رفع Screenshot إثبات الدفع</h4>
-            <p class="text-slate-400 mb-5">رفع صورة الدفع إجباري بعد اختيار وسيلة الدفع.</p>
-            <input type="file" id="paymentProof" accept="image/*" class="block mx-auto text-sm text-slate-300" />
-            <div id="paymentProofError" class="error-hint">لا يمكن تأكيد الطلب بدون صورة إثبات الدفع</div>
-          </div>
-
-          <div>
-            <label class="block mb-3 font-bold" id="lblNotesMain" data-i18n="labelNotes">ملاحظات إضافية</label>
-            <textarea id="notes" rows="4" class="input-field resize-none" placeholder="أي تفاصيل أخرى..."></textarea>
-            <div id="notesError" class="error-hint" data-i18n="errNotes">الملاحظات مطلوبة</div>
-          </div>
-
-          <div class="flex flex-col md:flex-row items-center justify-center gap-4 pt-6">
+            <div>
+              <label class="block mb-3 font-bold" id="lblNotesMain" data-i18n="labelNotes">ملاحظات إضافية</label>
+              <textarea id="notes" rows="4" class="input-field resize-none" placeholder="أي تفاصيل أخرى..."></textarea>
+              <div id="notesError" class="error-hint" data-i18n="errNotes">الملاحظات مطلوبة</div>
+            </div>
+          </div> <div class="flex flex-col md:flex-row items-center justify-center gap-4 pt-6" id="submitButtonsWrapper">
             <button type="submit" id="btnMainSubmit" class="w-full md:w-auto px-14 py-5 rounded-3xl themed-button text-xl font-black transition glow">
               <i class="fa-solid fa-paper-plane"></i> <span data-i18n="btnSubmit">تأكيد الطلب</span>
             </button>
-            <a href="https://wa.me/201122750229" class="w-full md:w-auto px-10 py-5 rounded-3xl bg-green-500 text-white text-xl font-black transition hover:scale-105 text-center">
-              <i class="fa-solid fa-headset"></i> تواصل مع الدعم
-            </a>
           </div>
         </form>
       </div>
@@ -446,11 +459,11 @@
       <div class="glass rounded-[35px] p-10 glow text-center fade-up">
         <div class="loader-luxury"></div>
         <h3 class="text-3xl font-black mb-4" data-i18n="loadingTitle">جاري تجهيز الطلب...</h3>
-        <p id="loadingText" class="text-cyan-500 font-black text-lg">جارٍ المعالجة</p>
+        <p id="loadingText" class="text-cyan-500 font-black text-lg" data-i18n="loadingTextVal">جارٍ المعالجة</p>
       </div>
     </section>
 
-    <section id="receipt" class="hidden-soft max-w-5xl mx-auto px-6 pb-24">
+    <section id="receipt" class="hidden-soft max-w-5xl mx-auto px-6 pb-24 relative z-10">
       <div class="glass rounded-[35px] p-8 md:p-10 glow fade-up">
         <div class="success-check">
           <svg viewBox="0 0 52 52" fill="none"><path d="M14 27.5L23 36L39 17" stroke="#34d399" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -474,6 +487,21 @@
     </section>
   </main>
 
+  <div id="mapGuideModal" class="fixed inset-0 z-[100] hidden-soft flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="glass p-8 rounded-3xl max-w-md w-full text-center fade-up relative border border-cyan-500/50">
+      <div class="text-5xl mb-4">📍</div>
+      <h3 class="text-2xl font-black mb-4 text-cyan-400" data-i18n="modalMapTitle">طريقة تحديد موقعك</h3>
+      <div class="text-slate-300 mb-6 leading-8 font-bold text-sm text-right" data-i18n="modalMapDesc">
+        1. هيفتحلك خرائط جوجل.<br>
+        2. حدد مكانك بدقة على الخريطة.<br>
+        3. اضغط على زر "مشاركة" (Share) واختار "نسخ الرابط" (Copy Link).<br>
+        4. ارجع هنا تاني واعمل لصق للرابط في الخانة.
+      </div>
+      <button onclick="confirmMapOpen()" class="themed-button w-full py-4 rounded-xl font-black text-lg" data-i18n="btnUnderstood">فهمت، افتح الخريطة</button>
+      <button onclick="closeMapModal()" class="mt-4 text-slate-400 hover:text-white underline text-sm font-bold" data-i18n="btnCancel">إلغاء</button>
+    </div>
+  </div>
+
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx00-JIXoy0FqHDAtyHneOOEXyJJ_4gvT1Wh5eHXSvG_H6QKsw_5zE6Qlp5_Adbwu7p/exec"; 
     const WHATSAPP_PHONE = "201122750229";
@@ -481,7 +509,6 @@
     const urlParams = new URLSearchParams(window.location.search);
     let loggedInEmpCode = urlParams.get('emp'); 
     
-    // [التعديل]: سحب الكود من السيرفر عند فتح العميل للصفحة مباشرة
     window.addEventListener("load", async () => {
       if (!loggedInEmpCode) {
         document.getElementById('empDisplay').innerText = "جاري البحث عن موظف متاح...";
@@ -520,20 +547,25 @@
         feat3Title: "تأكيد واتساب", feat3Desc: "التأكيد عبر الواتساب لضمان دقة العمل.",
         servicesTitle: "اختر الخدمة المطلوبة", availableNow: "متاحة الآن", errService: "اختر الخدمة أولاً",
         startHere: "ابدأ من هنا", introTitle: "البيانات تظهر حسب اختيارك", introDesc: "نموذج ذكي يتكيف مع نوع الخدمة.",
-        formTitle: "بيانات الطلب", formDesc: "املأ البيانات واضغط تأكيد لإنشاء الفاتورة.", btnBack: "رجوع",
+        empSubtitle: "تم سحب الكود تلقائياً بناءً على الشيفت المفتوح.",
+        formTitle: "بيانات الطلب", formDesc: "املأ البيانات بدقة، واضغط تأكيد.", btnBack: "رجوع",
+        lblSearchOrder: "أدخل رقم الهاتف أو كود الطلب:", btnSearch: "بحث", errSearch: "لم يتم العثور على الطلب.",
+        specialDesc: "لطلبات الشراء الخاصة أو الاستفسارات، يرجى التواصل مع خدمة العملاء مباشرة.", btnWaSupport: "تواصل مع خدمة العملاء الآن",
         labelName: "الاسم بالكامل", errName: "الاسم ثنائي على الأقل",
-        labelPhone: "رقم الهاتف", errPhone: "رقم الهاتف 11 رقم",
-        labelAltPhone: "هاتف بديل", errAltPhone: "الرقم البديل يجب أن يكون مختلفاً",
-        mapDeliveryTitle: "مكان التسليم للعميل", mapDeliveryDesc: "اضغط على الخريطة لتحديد موقعك أو ابحث عن العنوان.", btnOpenMap: "الخريطة للبحث 🗺️",
-        errAddress: "يرجى تحديد الموقع", checkPickup: "المندوب هيستلم الحاجه من مكان تاني؟ (إضافة موقع استلام)",
-        mapPickupTitle: "موقع الاستلام", dateTimeTitle: "التاريخ والوقت",
-        labelDate: "التاريخ", errDate: "اختر التاريخ", labelTime: "الوقت", errTime: "اختر الوقت",
-        chosenTime: "الوقت المختار", depositTitle: "العربون", labelDeposit: "المبلغ", errDeposit: "أدخل المبلغ بالأرقام",
-        paymentTitle: "طريقة الدفع", errPayment: "اختر الدفع", labelNotes: "ملاحظات إضافية", errNotes: "مطلوب إدخال ملاحظاتك",
-        btnSubmit: "تأكيد الطلب", loadingTitle: "جاري المعالجة...",
-        receiptTitle: "تم إصدار الفاتورة", receiptWarn: "يجب إرسال رسالة الواتساب لاعتماد الطلب",
-        orderIdLabel: "كود الطلب", btnWa: "تأكيد عبر واتساب", btnNew: "طلب جديد", lblSearchOrder: "أدخل رقم الطلب لاسترجاع بياناتك:", btnSearch: "بحث", errSearch: "لم يتم العثور على الطلب.",
-        lblClient: "العميل", lblPhone: "الهاتف", lblServ: "الخدمة", lblPay: "الدفع", lblDep: "العربون", lblDate: "التاريخ", lblTime: "الوقت", lblAdd: "التسليم", lblPick: "الاستلام", lblNote: "ملاحظات"
+        labelPhone: "رقم الهاتف الأساسي", errPhone: "رقم الهاتف 11 رقم",
+        labelAltPhone: "رقم الهاتف البديل", errAltPhone: "لا يمكن إدخال نفس الرقم مرتين، يرجى إدخال رقم بديل مختلف.",
+        mapDeliveryTitle: "مكان التسليم للعميل", btnOpenMapModal: "فتح خرائط جوجل", errAddress: "اكتب عنواناً واضحاً أو الصق الرابط.",
+        checkPickup: "المندوب هيستلم الحاجه من مكان تاني؟", mapPickupTitle: "موقع الاستلام",
+        dateTimeTitle: "التاريخ والوقت الحالي", labelDate: "التاريخ", errDate: "مطلوب", labelTime: "الوقت", errTime: "مطلوب", chosenTime: "الوقت الآن",
+        depositTitle: "تنويه العربون", depositWarn: "تأكيد الحجز يتطلب دفع عربون ورفع إثبات.", labelDeposit: "قيمة العربون (أرقام فقط)", errDeposit: "أرقام فقط.",
+        paymentTitle: "طريقة الدفع", errPayment: "اختر الدفع أولاً",
+        lblProof: "رفع Screenshot إثبات الدفع", lblProofDesc: "إجباري بعد الدفع.", errProof: "لا يمكن تأكيد الطلب بدون إثبات.",
+        labelNotes: "ملاحظات إضافية", errNotes: "الملاحظات مطلوبة",
+        btnSubmit: "تأكيد الطلب",
+        loadingTitle: "جاري تجهيز الطلب...", loadingTextVal: "جارٍ المعالجة",
+        receiptTitle: "تم إصدار الفاتورة", receiptWarn: "يجب إرسال الواتساب لاعتماد الطلب",
+        orderIdLabel: "كود الطلب", btnWa: "تأكيد عبر واتساب", btnNew: "رجوع للرئيسية",
+        modalMapTitle: "طريقة تحديد موقعك", modalMapDesc: "1. هيفتح خرائط جوجل.<br>2. حدد مكانك.<br>3. انسخ الرابط.<br>4. الصقه في الخانة.", btnUnderstood: "فهمت، افتح الخريطة", btnCancel: "إلغاء"
       },
       en: {
         pageTitle: "Delivery System | Mr Mahmoud", brandTitle: "Mr Mahmoud Delivery", brandSub: "Smart Booking System",
@@ -544,23 +576,29 @@
         feat3Title: "WhatsApp Confirm", feat3Desc: "Confirm via WhatsApp to guarantee seriousness.",
         servicesTitle: "Select a Service", availableNow: "Available Now", errService: "Select a service first",
         startHere: "Start Here", introTitle: "Dynamic Data Forms", introDesc: "A smart form that adapts to your service.",
-        formTitle: "Order Details", formDesc: "Fill accurately, then confirm to generate invoice.", btnBack: "Back",
+        empSubtitle: "Code automatically fetched from active shift.",
+        formTitle: "Order Details", formDesc: "Fill accurately and confirm.", btnBack: "Back",
+        lblSearchOrder: "Enter Phone or Order ID:", btnSearch: "Search", errSearch: "Order not found.",
+        specialDesc: "For special purchases or inquiries, please contact customer service.", btnWaSupport: "Contact Support Now",
         labelName: "Full Name", errName: "At least two words",
-        labelPhone: "Phone Number", errPhone: "Must be 11 digits",
-        labelAltPhone: "Alternative Phone", errAltPhone: "Must be different & 11 digits",
-        mapDeliveryTitle: "Delivery Location", mapDeliveryDesc: "Click map to set location", btnOpenMap: "Search Map 🗺️",
-        errAddress: "Location required", checkPickup: "Add Pickup Location? (Optional)",
-        mapPickupTitle: "Pickup Location", dateTimeTitle: "Date & Time",
-        labelDate: "Date", errDate: "Choose Date", labelTime: "Time", errTime: "Choose Time",
-        chosenTime: "Selected Time", depositTitle: "Deposit", labelDeposit: "Amount", errDeposit: "Enter Numbers Only",
-        paymentTitle: "Payment Method", errPayment: "Choose Payment", labelNotes: "Notes", errNotes: "Required",
-        btnSubmit: "Confirm Request", loadingTitle: "Processing...",
-        receiptTitle: "Invoice Generated", receiptWarn: "You must send the WhatsApp message to approve.",
-        orderIdLabel: "Order ID", btnWa: "Confirm via WhatsApp", btnNew: "New Order", lblSearchOrder: "Enter Order ID to retrieve data:", btnSearch: "Search", errSearch: "Order not found.",
-        lblClient: "Client", lblPhone: "Phone", lblServ: "Service", lblPay: "Payment", lblDep: "Deposit", lblDate: "Date", lblTime: "Time", lblAdd: "Delivery", lblPick: "Pickup", lblNote: "Notes"
+        labelPhone: "Main Phone", errPhone: "Must be 11 digits",
+        labelAltPhone: "Alternative Phone", errAltPhone: "Cannot be the same. Enter a different number.",
+        mapDeliveryTitle: "Delivery Location", btnOpenMapModal: "Open Google Maps", errAddress: "Write clearly or paste link.",
+        checkPickup: "Add Pickup Location?", mapPickupTitle: "Pickup Location",
+        dateTimeTitle: "Current Date & Time", labelDate: "Date", errDate: "Required", labelTime: "Time", errTime: "Required", chosenTime: "Current Time",
+        depositTitle: "Deposit", depositWarn: "Deposit & screenshot required.", labelDeposit: "Amount (Numbers only)", errDeposit: "Numbers only.",
+        paymentTitle: "Payment Method", errPayment: "Choose payment",
+        lblProof: "Upload Screenshot", lblProofDesc: "Required after payment.", errProof: "Proof required.",
+        labelNotes: "Notes", errNotes: "Required",
+        btnSubmit: "Confirm Request",
+        loadingTitle: "Processing...", loadingTextVal: "Please wait",
+        receiptTitle: "Invoice Generated", receiptWarn: "Send WhatsApp to approve.",
+        orderIdLabel: "Order ID", btnWa: "Confirm via WhatsApp", btnNew: "Back to Home",
+        modalMapTitle: "How to set location", modalMapDesc: "1. Open Maps.<br>2. Pin location.<br>3. Copy link.<br>4. Paste it.", btnUnderstood: "Got it, Open Maps", btnCancel: "Cancel"
       }
     };
 
+    let currentLang = "ar";
     function toggleLang() {
       currentLang = currentLang === "ar" ? "en" : "ar";
       document.documentElement.lang = currentLang;
@@ -569,7 +607,9 @@
       document.getElementById("langBtn").innerText = currentLang === "ar" ? "EN" : "AR";
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (i18n[currentLang][key]) el.innerHTML = i18n[currentLang][key];
+        if (i18n[currentLang] && i18n[currentLang][key]) {
+          el.innerHTML = i18n[currentLang][key];
+        }
       });
     }
 
@@ -639,29 +679,45 @@
       els.formCard.classList.remove("hidden-soft");
       
       const searchBox = document.getElementById("searchOrderBox");
+      const mainForm = document.getElementById("mainFormFields");
+      const specialBox = document.getElementById("specialServiceBox");
+      const btnSubmitWrapper = document.getElementById("submitButtonsWrapper");
       const btnSubmit = document.getElementById("btnMainSubmit");
       const lblNotes = document.getElementById("lblNotesMain");
       const subtitle = document.getElementById("formSubtitle");
       
-      if (id === "tracking" || id === "cancel") {
+      searchBox.classList.add("hidden-soft");
+      mainForm.classList.remove("hidden-soft");
+      specialBox.classList.add("hidden-soft");
+      btnSubmitWrapper.classList.remove("hidden-soft");
+
+      if (id === "special") {
+        mainForm.classList.add("hidden-soft");
+        btnSubmitWrapper.classList.add("hidden-soft");
+        specialBox.classList.remove("hidden-soft");
+        subtitle.innerHTML = `لطلباتك الخاصة تواصل معنا.`;
+      } 
+      else if (id === "tracking" || id === "cancel") {
         searchBox.classList.remove("hidden-soft");
+        mainForm.classList.add("hidden-soft");
+        btnSubmitWrapper.classList.add("hidden-soft");
+
         if(id === "cancel") {
           btnSubmit.innerHTML = `<i class="fa-solid fa-trash"></i> <span data-i18n="btnSubmit">تأكيد وإلغاء الطلب</span>`;
           btnSubmit.classList.replace("themed-button", "bg-red-500");
-          lblNotes.innerHTML = `سبب الإلغاء (يرجى التوضيح ومراسلة خدمة العملاء لأي مساعدة)`;
-          subtitle.innerHTML = `قم بالبحث برقم الطلب واكتب سبب الإلغاء.`;
+          lblNotes.innerHTML = `سبب الإلغاء (يرجى التوضيح)`;
+          subtitle.innerHTML = `قم بالبحث برقم الهاتف أو الطلب واكتب سبب الإلغاء.`;
         } else {
           btnSubmit.innerHTML = `<i class="fa-solid fa-pen"></i> <span data-i18n="btnSubmit">حفظ التعديلات</span>`;
           btnSubmit.classList.replace("bg-red-500", "themed-button");
           lblNotes.innerHTML = `ملاحظات التعديل`;
-          subtitle.innerHTML = `قم بالبحث برقم الطلب وعدل البيانات التي تريدها.`;
+          subtitle.innerHTML = `قم بالبحث وعدل البيانات التي تريدها.`;
         }
       } else {
-        searchBox.classList.add("hidden-soft");
         btnSubmit.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span data-i18n="btnSubmit">تأكيد الطلب</span>`;
         btnSubmit.classList.replace("bg-red-500", "themed-button");
         lblNotes.innerHTML = `ملاحظات إضافية`;
-        subtitle.innerHTML = `املأ البيانات بدقة، واضغط زر تأكيد الطلب.`;
+        subtitle.innerHTML = `املأ البيانات بدقة، واضغط تأكيد.`;
       }
       
       els.formCard.scrollIntoView({ behavior: "smooth" });
@@ -673,12 +729,35 @@
       document.getElementById("existingOrderId").value = "";
       els.formCard.classList.add("hidden-soft");
       els.introPanel.classList.remove("hidden-soft");
+      document.getElementById("addressFeedback").classList.add("hidden");
     }
 
-    function openGoogleMapsDirectly(type) {
-      window.open('https://www.google.com/maps', '_blank');
-      alert("تم فتح خرائط جوجل. ابحث عن مكانك، انسخ الرابط والصقه في الخانة بالأسفل.");
+    function showMapGuide(type) {
+      document.getElementById("mapGuideModal").classList.remove("hidden-soft");
     }
+    
+    function closeMapModal() {
+      document.getElementById("mapGuideModal").classList.add("hidden-soft");
+    }
+
+    function confirmMapOpen() {
+      closeMapModal();
+      window.open('https://www.google.com/maps', '_blank');
+    }
+
+    // تفاعل العنوان
+    document.getElementById("address").addEventListener("input", function() {
+      const fb = document.getElementById("addressFeedback");
+      fb.classList.remove("hidden");
+      const val = this.value.trim();
+      if(val.includes("http")) {
+        fb.innerHTML = "<span class='text-emerald-400'>✅ تم إضافة الموقع بنجاح</span>";
+      } else if (val.length > 0) {
+        fb.innerHTML = "<span class='text-cyan-400'>✍️ يرجى كتابة العنوان كاملاً بالتفصيل</span>";
+      } else {
+        fb.classList.add("hidden");
+      }
+    });
 
     function togglePickupSection() {
       document.getElementById("pickupSection").classList.toggle("hidden-soft", !document.getElementById("hasPickup").checked);
@@ -700,11 +779,11 @@
       document.getElementById("paymentProofBox").classList.remove("hidden-soft");
     }
 
-    function selectWallet(name, btn) {
+    function selectWallet(name, code, btn) {
       document.querySelectorAll('.wallet-btn').forEach(el => el.classList.remove('active'));
       btn.classList.add('active');
       const ussdBox = document.getElementById("ussdCodeDisplay");
-      ussdBox.innerHTML = `<div>${name}</div><div style="direction:ltr; font-family:monospace; margin-top:10px;">*9*7*01021708011*المبلغ#</div>`;
+      ussdBox.innerHTML = `<div>${name}</div><div style="direction:ltr; font-family:monospace; margin-top:10px;">${code}</div>`;
       ussdBox.style.display = "block";
     }
 
@@ -713,7 +792,6 @@
     function setInitialDateTime() {
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-      document.getElementById("orderDate").min = now.toISOString().split("T")[0];
       document.getElementById("orderDate").value = now.toISOString().split("T")[0];
       document.getElementById("orderTime").value = now.toISOString().slice(11, 16);
       updateAnalogClock();
@@ -739,7 +817,8 @@
       errEl.style.display="none";
       
       document.getElementById("loadingBox").classList.remove("hidden-soft");
-      document.getElementById("formCard").classList.add("hidden-soft");
+      document.getElementById("mainFormFields").classList.add("hidden-soft");
+      document.getElementById("submitButtonsWrapper").classList.add("hidden-soft");
       
       try {
         const res = await fetch(SCRIPT_URL, {
@@ -749,11 +828,13 @@
         const result = await res.json();
         
         document.getElementById("loadingBox").classList.add("hidden-soft");
-        document.getElementById("formCard").classList.remove("hidden-soft");
-
+        
         if (result.status === "success") {
+          document.getElementById("mainFormFields").classList.remove("hidden-soft");
+          document.getElementById("submitButtonsWrapper").classList.remove("hidden-soft");
+          
           const data = result.data;
-          document.getElementById("existingOrderId").value = orderId;
+          document.getElementById("existingOrderId").value = data.id; // الرقم الأساسي D..#
           document.getElementById("name").value = data.name || "";
           document.getElementById("phone").value = data.phone || "";
           document.getElementById("altPhone").value = data.altPhone || "";
@@ -764,14 +845,17 @@
             document.getElementById("pickupAddress").value = data.pickupAddress;
           }
           document.getElementById("depositAmount").value = data.deposit || "";
-          alert("تم استرجاع البيانات. يمكنك التعديل الآن.");
+          document.getElementById("notes").value = data.notes || "";
+          
+          alert("تم استرجاع البيانات بنجاح. يمكنك التعديل/الإلغاء الآن.");
         } else {
           errEl.style.display="block";
+          document.getElementById("searchOrderBox").classList.remove("hidden-soft");
         }
       } catch(e) {
         document.getElementById("loadingBox").classList.add("hidden-soft");
-        document.getElementById("formCard").classList.remove("hidden-soft");
-        errEl.innerText = "خطأ في الاتصال بالخادم.";
+        document.getElementById("searchOrderBox").classList.remove("hidden-soft");
+        errEl.innerText = "خطأ في الاتصال بالسيرفر.";
         errEl.style.display="block";
       }
     }
@@ -816,19 +900,22 @@
       checkVal("address", "addressError", !document.getElementById("address").value.trim());
       checkVal("orderDate", "dateError", !date);
       checkVal("orderTime", "timeError", !time);
-      if(!state.payment) { document.getElementById("paymentError").style.display="block"; hasErr = true; }
       
-      if(!proof.files.length) { checkVal("paymentProof", "paymentProofError", true); }
+      let actionType = "new_order";
+      if(state.service.id === "tracking") actionType = "update_order";
+      if(state.service.id === "cancel") actionType = "cancel_order";
+
+      // لو طلب جديد او تعديل، لازم دفع. الإلغاء مش شرط.
+      if(actionType !== "cancel_order") {
+        if(!state.payment) { document.getElementById("paymentError").style.display="block"; hasErr = true; }
+        if(!proof.files.length && actionType === "new_order") { checkVal("paymentProof", "paymentProofError", true); }
+      }
 
       if (hasErr) {
         const firstErr = document.querySelector('.error-hint[style*="block"]');
         if(firstErr) firstErr.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
-
-      let actionType = "new_order";
-      if(state.service.id === "tracking") actionType = "update_order";
-      if(state.service.id === "cancel") actionType = "cancel_order";
 
       document.getElementById("formCard").classList.add("hidden-soft");
       document.getElementById("loadingBox").classList.remove("hidden-soft");
@@ -840,7 +927,7 @@
         const payload = {
           action: actionType,
           orderId: document.getElementById("existingOrderId").value,
-          employeeLetter: loggedInEmpCode, // إرسال الكود الذي تم التحقق منه
+          employeeLetter: loggedInEmpCode, 
           name: name, phone: phone, altPhone: altPhone,
           address: document.getElementById("address").value,
           mapLink: document.getElementById("mapLink").value,
@@ -848,7 +935,7 @@
           pickupMapLink: document.getElementById("hasPickup").checked ? document.getElementById("pickupMapLink").value : "",
           bookingDate: date, time: time,
           source: state.service.title,
-          payment: state.payment.title,
+          payment: state.payment ? state.payment.title : "غير محدد",
           depositAmount: document.getElementById("depositAmount").value,
           notes: document.getElementById("notes").value,
           attachmentName: fileData.name,
@@ -868,32 +955,29 @@
         
         let detailsHtml = `
           <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">العميل</div><div class="font-bold text-lg">${name}</div></div>
-          <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الهاتف</div><div class="font-bold text-lg text-emerald-400">${phone}</div></div>
-          <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الخدمة</div><div class="font-bold text-lg text-cyan-400">${state.service.title}</div></div>
-          <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الدفع</div><div class="font-bold text-lg text-purple-400">${state.payment.title} (عربون: ${payload.depositAmount})</div></div>
-          <div class="glass p-4 rounded-xl md:col-span-2"><div class="text-sm text-slate-400">التسليم</div><div class="font-bold text-lg">${payload.address}</div></div>
+          <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الهاتف الأساسي</div><div class="font-bold text-lg text-emerald-400">${phone}</div></div>
+          ${altPhone ? `<div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الهاتف البديل</div><div class="font-bold text-lg text-cyan-200">${altPhone}</div></div>` : ''}
+          <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الخدمة المطلوبة</div><div class="font-bold text-lg text-cyan-400">${payload.source}</div></div>
+          <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الدفع</div><div class="font-bold text-lg text-purple-400">${payload.payment} (عربون: ${payload.depositAmount})</div></div>
+          <div class="glass p-4 rounded-xl md:col-span-2"><div class="text-sm text-slate-400">مكان التسليم (العميل)</div><div class="font-bold text-lg">${payload.address}</div></div>
         `;
         if(payload.pickupAddress) {
-          detailsHtml += `<div class="glass p-4 rounded-xl md:col-span-2"><div class="text-sm text-slate-400">الاستلام من</div><div class="font-bold text-lg text-gold">${payload.pickupAddress}</div></div>`;
+          detailsHtml += `<div class="glass p-4 rounded-xl md:col-span-2"><div class="text-sm text-slate-400">مكان الاستلام</div><div class="font-bold text-lg text-gold">${payload.pickupAddress}</div></div>`;
         }
-        if(fileData.name) {
-          detailsHtml += `<div class="glass p-4 rounded-xl md:col-span-2"><div class="text-sm text-slate-400">المرفق (صورة الدفع)</div><div class="font-bold text-lg text-cyan-200">${fileData.name}</div></div>`;
-        }
-        detailsHtml += `<div class="glass p-4 rounded-xl md:col-span-2 flex justify-between"><div class="text-sm text-slate-400">رمز الموظف المسئول</div><div class="font-bold text-lg text-white bg-white/10 px-4 rounded-lg">${loggedInEmpCode}</div></div>`;
+        detailsHtml += `<div class="glass p-4 rounded-xl md:col-span-2"><div class="text-sm text-slate-400">الملاحظات</div><div class="font-bold text-lg">${payload.notes || 'لا يوجد'}</div></div>`;
+        detailsHtml += `<div class="glass p-4 rounded-xl md:col-span-2 flex justify-between items-center"><div class="text-sm text-slate-400">رمز الموظف المسئول</div><div class="font-bold text-lg text-white bg-white/10 px-4 py-1 rounded-lg">${loggedInEmpCode}</div></div>`;
 
         document.getElementById("receiptData").innerHTML = detailsHtml;
         document.getElementById("receipt").classList.remove("hidden-soft");
         
-        let waMsg = `طلب توصيل جديد 🚚\nرقم الطلب: ${finalId}\nالعميل: ${name}\nالهاتف: ${phone}\nالتسليم: ${payload.address}\nالاستلام: ${payload.pickupAddress || 'لا يوجد'}\nالدفع: ${payload.payment}\nملاحظات: ${payload.notes}`;
-        if(actionType === "update_order") waMsg = `تعديل طلب 🚚\nرقم الطلب: ${finalId}\nالعميل: ${name}\nالتسليم الجديد: ${payload.address}\nملاحظات التعديل: ${payload.notes}`;
-        if(actionType === "cancel_order") waMsg = `طلب إلغاء أوردر ❌\nرقم الطلب: ${finalId}\nالعميل: ${name}\nسبب الإلغاء: ${payload.notes}`;
+        let waMsg = `*تفاصيل الأوردر* 🚚\n\n*رقم الطلب:* ${finalId}\n*العميل:* ${name}\n*الهاتف:* ${phone} ${altPhone? `\n*بديل:* ${altPhone}`:''}\n*مكان التسليم:* ${payload.address}\n${payload.pickupAddress? `*مكان الاستلام:* ${payload.pickupAddress}\n`:''}*الدفع:* ${payload.payment} (عربون: ${payload.depositAmount})\n*الخدمة:* ${payload.source}\n*الملاحظات:* ${payload.notes}\n*كود الموظف:* ${loggedInEmpCode}`;
         
         document.getElementById("whatsappConfirmBtn").href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(waMsg)}`;
         
       } catch (e) {
         document.getElementById("loadingBox").classList.add("hidden-soft");
         document.getElementById("formCard").classList.remove("hidden-soft");
-        alert("حدث خطأ في الاتصال بالخادم. يرجى مراجعة إعدادات السكربت.");
+        alert("حدث خطأ في الاتصال بالخادم. يرجى المراجعة والمحاولة مرة أخرى.");
       }
     });
 
@@ -904,6 +988,13 @@
     }
 
     renderServices(); renderPayments(); initClockMarks(); setInitialDateTime(); setInterval(updateAnalogClock, 1000);
+    // التحديث المستمر للوقت
+    setInterval(() => {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      document.getElementById("orderDate").value = now.toISOString().split("T")[0];
+      document.getElementById("orderTime").value = now.toISOString().slice(11, 16);
+    }, 60000); // تحديث كل دقيقة
   </script>
 </body>
 </html>
