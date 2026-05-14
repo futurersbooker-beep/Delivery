@@ -98,7 +98,6 @@
     .nylon-lamp { background: linear-gradient(145deg, rgba(34,211,238,.11), rgba(168,85,247,.08)), radial-gradient(circle at 20% 20%, rgba(255,255,255,.16), transparent 28%); box-shadow: inset 0 0 50px rgba(255,255,255,.05), 0 22px 70px rgba(34,211,238,.13); }
     [data-mode="light"] .nylon-lamp { background: rgba(255,255,255,0.8); box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
     
-    /* فواصل نيون حديثة */
     .glowing-divider {
       height: 3px; border: none; width: 85%; margin: 40px auto; border-radius: 50%;
       background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
@@ -118,7 +117,6 @@
     .field-invalid { border-color: rgba(251,113,133,.9) !important; box-shadow: 0 0 0 3px rgba(251,113,133,.10); }
     .info-note { color: #67e8f9; background: rgba(34,211,238,.08); border: 1px solid rgba(34,211,238,.18); }
     
-    /* منع تلوين الأيقونات في الكالندر للمود المظلم */
     input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1); opacity: .85; }
     [data-mode="light"] input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
     
@@ -145,6 +143,7 @@
     .success-check svg { width: 52px; height: 52px; stroke-dasharray: 60; stroke-dashoffset: 60; animation: drawCheck .75s .25s ease forwards; }
     
     .whatsapp-danger { background: linear-gradient(135deg, #25D366, #128C7E); color: white; box-shadow: 0 0 24px rgba(37,211,102,.45); animation: dangerPulse 1s infinite alternate, warningMove 1.6s ease-in-out infinite; }
+    .cancel-receipt { background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(153,27,27,0.2)) !important; border: 1px solid rgba(239,68,68,0.4) !important; }
     
     /* Animation Delivery Footer */
     .delivery-truck-bg {
@@ -309,12 +308,20 @@
           <div id="searchOrderError" class="error-hint" data-i18n="errSearch">لم يتم العثور على الطلب. تأكد من الرقم.</div>
         </div>
 
-        <div id="specialServiceBox" class="hidden-soft text-center py-10">
+        <div id="specialServiceBox" class="hidden-soft text-center py-6">
           <h2 class="text-4xl font-black text-gold mb-4">خدمة خاصة ✨</h2>
-          <p class="text-slate-300 mb-8 font-bold text-lg" data-i18n="specialDesc">لطلبات الشراء الخاصة أو الاستفسارات، يرجى التواصل مع خدمة العملاء مباشرة لتلبية طلبك بأسرع وقت.</p>
-          <a href="https://wa.me/201122750229" target="_blank" class="whatsapp-danger rounded-3xl px-10 py-5 text-2xl font-black inline-block hover:scale-105 transition">
+          <p class="text-slate-300 mb-8 font-bold text-lg" data-i18n="specialDesc">لطلبات الشراء الخاصة أو الاستفسارات، يرجى كتابة التفاصيل وسنقوم بخدمتك فوراً.</p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-right">
+             <input type="text" id="spcName" class="input-field" placeholder="الاسم الكريم">
+             <input type="tel" id="spcPhone" maxlength="11" class="input-field" placeholder="رقم الهاتف للتواصل" oninput="onlyDigits(this)">
+             <textarea id="spcRequest" rows="3" class="input-field md:col-span-2 resize-none" placeholder="اكتب تفاصيل طلبك هنا..."></textarea>
+          </div>
+
+          <button type="button" onclick="sendSpecialToWa()" class="whatsapp-danger rounded-3xl px-10 py-5 text-2xl font-black inline-block hover:scale-105 transition w-full md:w-auto">
             <i class="fa-brands fa-whatsapp"></i> <span data-i18n="btnWaSupport">تواصل مع خدمة العملاء الآن</span>
-          </a>
+          </button>
+          <div id="spcError" class="error-hint mt-4 text-center">يرجى ملء جميع البيانات قبل المراسلة.</div>
         </div>
 
         <form id="orderForm" class="space-y-8" novalidate>
@@ -384,13 +391,11 @@
                 <div class="grid grid-cols-1 gap-5">
                   <div>
                     <label class="block mb-3 font-bold" data-i18n="labelDate">التاريخ</label>
-                    <input type="date" id="orderDate" class="input-field" onkeydown="return false" />
-                    <div id="dateError" class="error-hint" data-i18n="errDate">اختر تاريخ مناسب</div>
+                    <input type="date" id="orderDate" class="input-field" onkeydown="return false" onclick="this.blur();" readonly />
                   </div>
                   <div>
                     <label class="block mb-3 font-bold" data-i18n="labelTime">الوقت</label>
-                    <input type="time" id="orderTime" class="input-field" onkeydown="return false" />
-                    <div id="timeError" class="error-hint" data-i18n="errTime">اختر الوقت</div>
+                    <input type="time" id="orderTime" class="input-field" onkeydown="return false" onclick="this.blur();" readonly />
                   </div>
                 </div>
               </div>
@@ -406,39 +411,41 @@
               </div>
             </div>
 
-            <div class="deposit-banner rounded-3xl p-6 mb-6">
-              <h3 class="text-2xl font-black mb-3" data-i18n="depositTitle">تنويه العربون</h3>
-              <p class="text-slate-200 leading-8 font-bold" data-i18n="depositWarn">
-                تأكيد الحجز يتطلب دفع عربون من وسيلة الدفع المختارة، وبعدها رفع Screenshot لإثبات الدفع.
-              </p>
-              <div class="mt-5">
-                <label class="block mb-3 font-bold" data-i18n="labelDeposit">قيمة العربون المرسل (أرقام فقط)</label>
-                <input type="text" id="depositAmount" class="input-field" placeholder="مثال: 100" oninput="onlyDigits(this)" />
-                <div id="depositAmountError" class="error-hint" data-i18n="errDeposit">اكتب قيمة العربون بالأرقام فقط.</div>
+            <div id="paymentContainer" class="mb-6">
+              <div class="deposit-banner rounded-3xl p-6 mb-6">
+                <h3 class="text-2xl font-black mb-3" data-i18n="depositTitle">تنويه العربون</h3>
+                <p class="text-slate-200 leading-8 font-bold" data-i18n="depositWarn">
+                  تأكيد الحجز يتطلب دفع عربون من وسيلة الدفع المختارة، وبعدها رفع Screenshot لإثبات الدفع.
+                </p>
+                <div class="mt-5">
+                  <label class="block mb-3 font-bold" data-i18n="labelDeposit">قيمة العربون المرسل (أرقام فقط)</label>
+                  <input type="text" id="depositAmount" class="input-field" placeholder="مثال: 100" oninput="onlyDigits(this)" />
+                  <div id="depositAmountError" class="error-hint" data-i18n="errDeposit">اكتب قيمة العربون بالأرقام فقط.</div>
+                </div>
               </div>
-            </div>
 
-            <div class="mb-6">
-              <h3 class="text-2xl font-bold mb-6" data-i18n="paymentTitle">طريقة الدفع</h3>
-              <div id="paymentsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
-              <div id="paymentError" class="error-hint" data-i18n="errPayment">اختر طريقة الدفع أولًا</div>
-              
-              <div id="walletNetworks" class="wallet-networks">
-                <div class="wallet-btn" onclick="selectWallet('فودافون كاش', '*9*7*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-red-500 text-2xl"></i>فودافون كاش</div>
-                <div class="wallet-btn" onclick="selectWallet('اتصالات كاش', '*777*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-green-500 text-2xl"></i>اتصالات كاش</div>
-                <div class="wallet-btn" onclick="selectWallet('أورانج كاش', '#115*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-orange-500 text-2xl"></i>أورانج كاش</div>
-                <div class="wallet-btn" onclick="selectWallet('وي باي', '*322*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-purple-500 text-2xl"></i>وي باي</div>
+              <div>
+                <h3 class="text-2xl font-bold mb-6" data-i18n="paymentTitle">طريقة الدفع</h3>
+                <div id="paymentsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+                <div id="paymentError" class="error-hint" data-i18n="errPayment">اختر طريقة الدفع أولًا</div>
+                
+                <div id="walletNetworks" class="wallet-networks">
+                  <div class="wallet-btn" onclick="selectWallet('فودافون كاش', '*9*7*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-red-500 text-2xl"></i>فودافون كاش</div>
+                  <div class="wallet-btn" onclick="selectWallet('اتصالات كاش', '*777*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-green-500 text-2xl"></i>اتصالات كاش</div>
+                  <div class="wallet-btn" onclick="selectWallet('أورانج كاش', '#115*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-orange-500 text-2xl"></i>أورانج كاش</div>
+                  <div class="wallet-btn" onclick="selectWallet('وي باي', '*322*01021708011*المبلغ#', this)"><i class="fa-solid fa-circle text-purple-500 text-2xl"></i>وي باي</div>
+                </div>
+                
+                <div id="ussdCodeDisplay" class="ussd-code text-center"></div>
               </div>
-              
-              <div id="ussdCodeDisplay" class="ussd-code text-center"></div>
-            </div>
 
-            <div id="paymentProofBox" class="glass rounded-3xl p-8 text-center border-2 border-dashed border-white/10 hidden-soft mb-6">
-              <div class="text-6xl mb-4">📎</div>
-              <h4 class="text-2xl font-bold mb-3" data-i18n="lblProof">رفع Screenshot إثبات الدفع</h4>
-              <p class="text-slate-400 mb-5" data-i18n="lblProofDesc">رفع صورة الدفع إجباري بعد اختيار وسيلة الدفع.</p>
-              <input type="file" id="paymentProof" accept="image/*" class="block mx-auto text-sm text-slate-300" />
-              <div id="paymentProofError" class="error-hint" data-i18n="errProof">لا يمكن تأكيد الطلب بدون صورة إثبات الدفع</div>
+              <div id="paymentProofBox" class="glass rounded-3xl p-8 text-center border-2 border-dashed border-white/10 hidden-soft mt-6">
+                <div class="text-6xl mb-4">📎</div>
+                <h4 class="text-2xl font-bold mb-3" data-i18n="lblProof">رفع Screenshot إثبات الدفع</h4>
+                <p class="text-slate-400 mb-5" data-i18n="lblProofDesc">رفع صورة الدفع إجباري بعد اختيار وسيلة الدفع.</p>
+                <input type="file" id="paymentProof" accept="image/*" class="block mx-auto text-sm text-slate-300" />
+                <div id="paymentProofError" class="error-hint" data-i18n="errProof">لا يمكن تأكيد الطلب بدون صورة إثبات الدفع</div>
+              </div>
             </div>
 
             <div>
@@ -464,15 +471,15 @@
     </section>
 
     <section id="receipt" class="hidden-soft max-w-5xl mx-auto px-6 pb-24 relative z-10">
-      <div class="glass rounded-[35px] p-8 md:p-10 glow fade-up">
-        <div class="success-check">
+      <div id="receiptCard" class="glass rounded-[35px] p-8 md:p-10 glow fade-up">
+        <div class="success-check" id="receiptCheckIcon">
           <svg viewBox="0 0 52 52" fill="none"><path d="M14 27.5L23 36L39 17" stroke="#34d399" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <div class="text-center mb-8">
           <h3 class="text-4xl md:text-5xl font-black mb-4" id="receiptMainTitle" data-i18n="receiptTitle">ملخص الطلب الرسمي</h3>
           <p class="text-danger font-bold text-lg" data-i18n="receiptWarn">لازم تضغط زر واتساب لإرسال الرسالة وتأكيد الطلب فعلياً.</p>
         </div>
-        <div class="glass rounded-3xl p-6 text-center mb-8 border border-cyan-500/30">
+        <div class="glass rounded-3xl p-6 text-center mb-8 border border-cyan-500/30" id="orderIdContainer">
           <div class="text-slate-500 font-bold mb-2" data-i18n="orderIdLabel">رقم الطلب</div>
           <div id="orderId" class="text-4xl md:text-5xl font-black themed-gradient-text"></div>
         </div>
@@ -503,7 +510,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHQBBksY41VLmX12EwDepAwr7-zXppMTTbknyOHbg6oy0u39TbXrOFRq_uvcJUPlt4/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsNEUtuyXGab56gidj_NCIzvlglHzvPAzHpoAMyhKN8Z_NQS1fuA_z7Uc9Z2IRqr-A/exec"; // خليه هو هو نفس الرابط
     const WHATSAPP_PHONE = "201122750229";
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -550,7 +557,7 @@
         empSubtitle: "تم سحب الكود تلقائياً بناءً على الشيفت المفتوح.",
         formTitle: "بيانات الطلب", formDesc: "املأ البيانات بدقة، واضغط تأكيد.", btnBack: "رجوع",
         lblSearchOrder: "أدخل رقم الهاتف أو كود الطلب:", btnSearch: "بحث", errSearch: "لم يتم العثور على الطلب.",
-        specialDesc: "لطلبات الشراء الخاصة أو الاستفسارات، يرجى التواصل مع خدمة العملاء مباشرة.", btnWaSupport: "تواصل مع خدمة العملاء الآن",
+        specialDesc: "لطلبات الشراء الخاصة أو الاستفسارات، يرجى كتابة التفاصيل وسنقوم بخدمتك فوراً.", btnWaSupport: "تواصل مع خدمة العملاء الآن",
         labelName: "الاسم بالكامل", errName: "الاسم ثنائي على الأقل",
         labelPhone: "رقم الهاتف الأساسي", errPhone: "رقم الهاتف 11 رقم",
         labelAltPhone: "رقم الهاتف البديل", errAltPhone: "لا يمكن إدخال نفس الرقم مرتين، يرجى إدخال رقم بديل مختلف.",
@@ -579,7 +586,7 @@
         empSubtitle: "Code automatically fetched from active shift.",
         formTitle: "Order Details", formDesc: "Fill accurately and confirm.", btnBack: "Back",
         lblSearchOrder: "Enter Phone or Order ID:", btnSearch: "Search", errSearch: "Order not found.",
-        specialDesc: "For special purchases or inquiries, please contact customer service.", btnWaSupport: "Contact Support Now",
+        specialDesc: "For special purchases or inquiries, write details below.", btnWaSupport: "Contact Support Now",
         labelName: "Full Name", errName: "At least two words",
         labelPhone: "Main Phone", errPhone: "Must be 11 digits",
         labelAltPhone: "Alternative Phone", errAltPhone: "Cannot be the same. Enter a different number.",
@@ -685,11 +692,13 @@
       const btnSubmit = document.getElementById("btnMainSubmit");
       const lblNotes = document.getElementById("lblNotesMain");
       const subtitle = document.getElementById("formSubtitle");
+      const paymentContainer = document.getElementById("paymentContainer");
       
       searchBox.classList.add("hidden-soft");
       mainForm.classList.remove("hidden-soft");
       specialBox.classList.add("hidden-soft");
       btnSubmitWrapper.classList.remove("hidden-soft");
+      paymentContainer.classList.remove("hidden-soft");
 
       if (id === "special") {
         mainForm.classList.add("hidden-soft");
@@ -703,13 +712,15 @@
         btnSubmitWrapper.classList.add("hidden-soft");
 
         if(id === "cancel") {
-          btnSubmit.innerHTML = `<i class="fa-solid fa-trash"></i> <span data-i18n="btnSubmit">تأكيد وإلغاء الطلب</span>`;
+          btnSubmit.innerHTML = `<i class="fa-solid fa-trash"></i> <span data-i18n="btnSubmit">تأكيد الإلغاء وحذف الطلب</span>`;
           btnSubmit.classList.replace("themed-button", "bg-red-500");
+          paymentContainer.classList.add("hidden-soft"); // مفيش دفع في الإلغاء
           lblNotes.innerHTML = `سبب الإلغاء (يرجى التوضيح)`;
           subtitle.innerHTML = `قم بالبحث برقم الهاتف أو الطلب واكتب سبب الإلغاء.`;
         } else {
           btnSubmit.innerHTML = `<i class="fa-solid fa-pen"></i> <span data-i18n="btnSubmit">حفظ التعديلات</span>`;
           btnSubmit.classList.replace("bg-red-500", "themed-button");
+          paymentContainer.classList.add("hidden-soft"); // التعديل مجاني أو بندفع مع المندوب
           lblNotes.innerHTML = `ملاحظات التعديل`;
           subtitle.innerHTML = `قم بالبحث وعدل البيانات التي تريدها.`;
         }
@@ -723,6 +734,21 @@
       els.formCard.scrollIntoView({ behavior: "smooth" });
     }
 
+    function sendSpecialToWa() {
+      const spcName = document.getElementById("spcName").value.trim();
+      const spcPhone = document.getElementById("spcPhone").value.trim();
+      const spcRequest = document.getElementById("spcRequest").value.trim();
+      const err = document.getElementById("spcError");
+      
+      if(!spcName || spcPhone.length !== 11 || !spcRequest) {
+        err.style.display = "block";
+        return;
+      }
+      err.style.display = "none";
+      const waMsg = `*خدمة خاصة / استفسار* ✨\n\n*الاسم:* ${spcName}\n*رقم التواصل:* ${spcPhone}\n*تفاصيل الطلب:*\n${spcRequest}`;
+      window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(waMsg)}`, '_blank');
+    }
+
     function resetSelection() {
       state.service = null;
       document.getElementById("orderForm").reset();
@@ -732,20 +758,13 @@
       document.getElementById("addressFeedback").classList.add("hidden");
     }
 
-    function showMapGuide(type) {
-      document.getElementById("mapGuideModal").classList.remove("hidden-soft");
-    }
-    
-    function closeMapModal() {
-      document.getElementById("mapGuideModal").classList.add("hidden-soft");
-    }
-
+    function showMapGuide(type) { document.getElementById("mapGuideModal").classList.remove("hidden-soft"); }
+    function closeMapModal() { document.getElementById("mapGuideModal").classList.add("hidden-soft"); }
     function confirmMapOpen() {
       closeMapModal();
       window.open('https://www.google.com/maps', '_blank');
     }
 
-    // تفاعل العنوان
     document.getElementById("address").addEventListener("input", function() {
       const fb = document.getElementById("addressFeedback");
       fb.classList.remove("hidden");
@@ -806,9 +825,7 @@
       document.getElementById("secondHand").style.transform = `rotate(${s*6}deg)`;
     }
 
-    function onlyDigits(el) {
-      el.value = el.value.replace(/[^0-9]/g, "");
-    }
+    function onlyDigits(el) { el.value = el.value.replace(/[^0-9]/g, ""); }
 
     async function fetchOrderData() {
       const orderId = document.getElementById("searchOrderId").value.trim();
@@ -834,7 +851,7 @@
           document.getElementById("submitButtonsWrapper").classList.remove("hidden-soft");
           
           const data = result.data;
-          document.getElementById("existingOrderId").value = data.id; // الرقم الأساسي D..#
+          document.getElementById("existingOrderId").value = data.id; 
           document.getElementById("name").value = data.name || "";
           document.getElementById("phone").value = data.phone || "";
           document.getElementById("altPhone").value = data.altPhone || "";
@@ -847,8 +864,9 @@
           document.getElementById("depositAmount").value = data.deposit || "";
           document.getElementById("notes").value = data.notes || "";
           
-          alert("تم استرجاع البيانات بنجاح. يمكنك التعديل/الإلغاء الآن.");
+          alert("تم استرجاع بيانات الطلب المفتوح بنجاح. يمكنك المتابعة الآن.");
         } else {
+          errEl.innerText = "لم يتم العثور على طلب نشط (قد يكون ملغي أو الرقم خطأ).";
           errEl.style.display="block";
           document.getElementById("searchOrderBox").classList.remove("hidden-soft");
         }
@@ -898,23 +916,27 @@
       checkVal("phone", "phoneError", phone.length !== 11);
       checkVal("altPhone", "altPhoneError", altPhone && (altPhone.length !== 11 || altPhone === phone));
       checkVal("address", "addressError", !document.getElementById("address").value.trim());
-      checkVal("orderDate", "dateError", !date);
-      checkVal("orderTime", "timeError", !time);
       
       let actionType = "new_order";
       if(state.service.id === "tracking") actionType = "update_order";
       if(state.service.id === "cancel") actionType = "cancel_order";
 
-      // لو طلب جديد او تعديل، لازم دفع. الإلغاء مش شرط.
-      if(actionType !== "cancel_order") {
+      // لو طلب جديد لازم دفع وعربون بصورة، لو تعديل أو إلغاء نتخطى
+      if(actionType === "new_order") {
         if(!state.payment) { document.getElementById("paymentError").style.display="block"; hasErr = true; }
-        if(!proof.files.length && actionType === "new_order") { checkVal("paymentProof", "paymentProofError", true); }
+        if(!proof.files.length) { checkVal("paymentProof", "paymentProofError", true); }
+      } else if (actionType === "cancel_order") {
+        if(!document.getElementById("notes").value.trim()) { checkVal("notes", "notesError", true); }
       }
 
       if (hasErr) {
         const firstErr = document.querySelector('.error-hint[style*="block"]');
         if(firstErr) firstErr.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
+      }
+      
+      if(actionType === "cancel_order") {
+        if(!confirm("هل أنت متأكد من قرار إلغاء هذا الطلب نهائياً؟")) return;
       }
 
       document.getElementById("formCard").classList.add("hidden-soft");
@@ -930,13 +952,11 @@
           employeeLetter: loggedInEmpCode, 
           name: name, phone: phone, altPhone: altPhone,
           address: document.getElementById("address").value,
-          mapLink: document.getElementById("mapLink").value,
           pickupAddress: document.getElementById("hasPickup").checked ? document.getElementById("pickupAddress").value : "",
-          pickupMapLink: document.getElementById("hasPickup").checked ? document.getElementById("pickupMapLink").value : "",
           bookingDate: date, time: time,
           source: state.service.title,
-          payment: state.payment ? state.payment.title : "غير محدد",
-          depositAmount: document.getElementById("depositAmount").value,
+          payment: state.payment ? state.payment.title : "تم مسبقاً / غير مطلوب",
+          depositAmount: document.getElementById("depositAmount").value || "0",
           notes: document.getElementById("notes").value,
           attachmentName: fileData.name,
           attachmentBase64: fileData.base64
@@ -947,8 +967,18 @@
         
         const finalId = (res && res.status === "success") ? res.id : "#ERR-000";
         let mainTitle = "ملخص الطلب الرسمي";
-        if(actionType === "update_order") mainTitle = "تم تعديل الطلب بنجاح";
-        if(actionType === "cancel_order") mainTitle = "تم إرسال طلب الإلغاء";
+        const receiptCard = document.getElementById("receiptCard");
+        const checkIcon = document.getElementById("receiptCheckIcon");
+        
+        if(actionType === "update_order") mainTitle = "تم تحديث الطلب بنجاح";
+        if(actionType === "cancel_order") {
+          mainTitle = "تم إلغاء الطلب بالكامل";
+          receiptCard.classList.add("cancel-receipt");
+          checkIcon.innerHTML = `<svg viewBox="0 0 52 52" fill="none"><path d="M16 16L36 36M36 16L16 36" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/></svg>`;
+        } else {
+          receiptCard.classList.remove("cancel-receipt");
+          checkIcon.innerHTML = `<svg viewBox="0 0 52 52" fill="none"><path d="M14 27.5L23 36L39 17" stroke="#34d399" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        }
         
         document.getElementById("receiptMainTitle").innerText = mainTitle;
         document.getElementById("orderId").innerText = finalId;
@@ -957,8 +987,8 @@
           <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">العميل</div><div class="font-bold text-lg">${name}</div></div>
           <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الهاتف الأساسي</div><div class="font-bold text-lg text-emerald-400">${phone}</div></div>
           ${altPhone ? `<div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الهاتف البديل</div><div class="font-bold text-lg text-cyan-200">${altPhone}</div></div>` : ''}
-          <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الخدمة المطلوبة</div><div class="font-bold text-lg text-cyan-400">${payload.source}</div></div>
-          <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الدفع</div><div class="font-bold text-lg text-purple-400">${payload.payment} (عربون: ${payload.depositAmount})</div></div>
+          <div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الخدمة المطلوبة</div><div class="font-bold text-lg text-cyan-400">${actionType === 'cancel_order'? 'طلب إلغاء' : payload.source}</div></div>
+          ${actionType === 'new_order' ? `<div class="glass p-4 rounded-xl"><div class="text-sm text-slate-400">الدفع</div><div class="font-bold text-lg text-purple-400">${payload.payment} (عربون: ${payload.depositAmount})</div></div>` : ''}
           <div class="glass p-4 rounded-xl md:col-span-2"><div class="text-sm text-slate-400">مكان التسليم (العميل)</div><div class="font-bold text-lg">${payload.address}</div></div>
         `;
         if(payload.pickupAddress) {
@@ -970,7 +1000,7 @@
         document.getElementById("receiptData").innerHTML = detailsHtml;
         document.getElementById("receipt").classList.remove("hidden-soft");
         
-        let waMsg = `*تفاصيل الأوردر* 🚚\n\n*رقم الطلب:* ${finalId}\n*العميل:* ${name}\n*الهاتف:* ${phone} ${altPhone? `\n*بديل:* ${altPhone}`:''}\n*مكان التسليم:* ${payload.address}\n${payload.pickupAddress? `*مكان الاستلام:* ${payload.pickupAddress}\n`:''}*الدفع:* ${payload.payment} (عربون: ${payload.depositAmount})\n*الخدمة:* ${payload.source}\n*الملاحظات:* ${payload.notes}\n*كود الموظف:* ${loggedInEmpCode}`;
+        let waMsg = `*تفاصيل الأوردر* 🚚\n\n*رقم الطلب:* ${finalId}\n*العميل:* ${name}\n*الهاتف:* ${phone} ${altPhone? `\n*بديل:* ${altPhone}`:''}\n*مكان التسليم:* ${payload.address}\n${payload.pickupAddress? `*مكان الاستلام:* ${payload.pickupAddress}\n`:''}${actionType==='new_order'? `*الدفع:* ${payload.payment} (عربون: ${payload.depositAmount})\n`:''}*الخدمة:* ${actionType==='cancel_order'?'إلغاء الطلب ❌':payload.source}\n*الملاحظات:* ${payload.notes}\n*كود الموظف:* ${loggedInEmpCode}`;
         
         document.getElementById("whatsappConfirmBtn").href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(waMsg)}`;
         
@@ -988,13 +1018,12 @@
     }
 
     renderServices(); renderPayments(); initClockMarks(); setInitialDateTime(); setInterval(updateAnalogClock, 1000);
-    // التحديث المستمر للوقت
     setInterval(() => {
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
       document.getElementById("orderDate").value = now.toISOString().split("T")[0];
       document.getElementById("orderTime").value = now.toISOString().slice(11, 16);
-    }, 60000); // تحديث كل دقيقة
+    }, 60000); 
   </script>
 </body>
 </html>
