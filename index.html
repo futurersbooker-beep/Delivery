@@ -144,15 +144,8 @@
     .whatsapp-danger { background: linear-gradient(135deg, #25D366, #128C7E); color: white; box-shadow: 0 0 24px rgba(37,211,102,.45); animation: dangerPulse 1s infinite alternate, warningMove 1.6s ease-in-out infinite; }
     .cancel-receipt { background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(153,27,27,0.2)) !important; border: 1px solid rgba(239,68,68,0.4) !important; }
     
-    /* Animation Delivery Footer */
-    .delivery-truck-bg {
-      position: fixed; bottom: 0; left: 0; width: 100%; height: 50px;
-      pointer-events: none; z-index: 0; opacity: 0.3; overflow: hidden;
-    }
-    .truck-icon {
-      position: absolute; bottom: 10px; font-size: 2rem;
-      animation: drive 12s linear infinite;
-    }
+    .delivery-truck-bg { position: fixed; bottom: 0; left: 0; width: 100%; height: 50px; pointer-events: none; z-index: 0; opacity: 0.3; overflow: hidden; }
+    .truck-icon { position: absolute; bottom: 10px; font-size: 2rem; animation: drive 12s linear infinite; }
     
     @keyframes drive { 0% { right: -100px; transform: scaleX(-1); } 100% { right: 100vw; transform: scaleX(-1); } }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
@@ -313,7 +306,6 @@
             <input type="text" id="searchOrderId" class="input-field" placeholder="رقم الهاتف أو كود الطلب...">
             <button type="button" class="themed-button px-6 rounded-xl font-bold" onclick="fetchOrderData()" data-i18n="btnSearch">بحث</button>
           </div>
-          <div id="searchOrderError" class="error-hint" data-i18n="errSearch">لم يتم العثور على الطلب. تأكد من الرقم.</div>
         </div>
 
         <div id="specialServiceBox" class="hidden-soft text-center py-6">
@@ -329,7 +321,6 @@
           <button type="button" onclick="sendSpecialToWa()" class="whatsapp-danger rounded-3xl px-10 py-5 text-2xl font-black inline-block hover:scale-105 transition w-full md:w-auto">
             <i class="fa-brands fa-whatsapp"></i> <span data-i18n="btnWaSupport">تواصل مع خدمة العملاء الآن</span>
           </button>
-          <div id="spcError" class="error-hint mt-4 text-center">يرجى ملء جميع البيانات قبل المراسلة.</div>
         </div>
 
         <form id="orderForm" class="space-y-8" novalidate>
@@ -520,14 +511,16 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsDzz6MPZMIqyudM7sAp5Vx9Bn9fTxgOpX4Q__HoZWMufSaIIkWvwtUgwfBRt5QYKI/exec"; 
+    // ⚠️ تم التحديث لرابط الاسكربت الخاص بك
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6cYh53MeivjbmS3qJ5wAJioHfbJ8mz0vr6sh4-NZN8-g_Zr27lGWio78xwtxUV7c/exec"; 
     const WHATSAPP_PHONE = "201122750229";
 
     const urlParams = new URLSearchParams(window.location.search);
     let loggedInEmpCode = urlParams.get('emp'); 
     
     window.addEventListener("load", async () => {
-      if (!loggedInEmpCode) {
+      // لو العميل فاتح اللينك من غير كود موظف، يبقى ده طلب أونلاين "W"
+      if (!loggedInEmpCode || loggedInEmpCode.trim() === "") {
         document.getElementById('empDisplay').innerText = "جاري البحث عن موظف متاح...";
         try {
           const response = await fetch(SCRIPT_URL, {
@@ -536,20 +529,26 @@
             body: JSON.stringify({ action: "get_active_employee" })
           });
           const result = await response.json();
-          if (result.status === "success" && result.data) {
+          // لو لقى موظف شغال ياخد كوده، ولو مفيش أو الإجابة كانت Admin يخليها W
+          if (result.status === "success" && result.data && result.data !== "Admin") {
             loggedInEmpCode = result.data;
           } else {
-            loggedInEmpCode = "Admin";
+            loggedInEmpCode = "W";
           }
         } catch (error) {
-          loggedInEmpCode = "Admin";
+          loggedInEmpCode = "W";
         }
       }
-      document.getElementById('empDisplay').innerText = loggedInEmpCode;
+      
+      const empDisplayEl = document.getElementById('empDisplay');
+      if (empDisplayEl) {
+          empDisplayEl.innerText = (loggedInEmpCode === "W") ? "حجز أونلاين مباشر (W)" : loggedInEmpCode;
+      }
+      
       setTimeout(() => { const splash = document.getElementById("splash"); if (splash) splash.classList.add("hide"); }, 500);
     });
 
-    // Custom Alert Logic
+    // دالة التنبيهات المخصصة عشان الاستايل يبقى احترافي
     function showAlert(title, message, icon="🔔", isConfirm = false, confirmCallback = null) {
         document.getElementById("alertTitle").innerText = title;
         document.getElementById("alertMessage").innerText = message;
@@ -579,8 +578,8 @@
         feat3Title: "تأكيد واتساب", feat3Desc: "التأكيد عبر الواتساب لضمان دقة العمل.",
         servicesTitle: "اختر الخدمة المطلوبة", availableNow: "متاحة الآن", errService: "اختر الخدمة أولاً",
         startHere: "ابدأ من هنا", introTitle: "البيانات تظهر حسب اختيارك", introDesc: "نموذج ذكي يتكيف مع نوع الخدمة.",
-        empSubtitle: "تم سحب الكود تلقائياً بناءً على الشيفت المفتوح.",
-        formTitle: "بيانات الطلب", formDesc: "املأ البيانات بدقة، واضغط تأكيد.", btnBack: "رجوع",
+        empSubtitle: "تم سحب الكود تلقائياً بناءً على الشيفت المفتوح أو الرابط.",
+        formTitle: "بيانات الطلب", formDesc: "املأ البيانات بدقة، واضغط تأكيد.", btnBack: "رجوع للخدمات",
         lblSearchOrder: "أدخل رقم الهاتف أو كود الطلب:", btnSearch: "بحث", errSearch: "لم يتم العثور على الطلب.",
         specialDesc: "لطلبات الشراء الخاصة أو الاستفسارات، يرجى كتابة التفاصيل وسنقوم بخدمتك فوراً.", btnWaSupport: "تواصل مع خدمة العملاء الآن",
         labelName: "الاسم بالكامل", errName: "الاسم ثنائي على الأقل",
@@ -714,7 +713,7 @@
         subtitle.innerHTML = `املأ البيانات بدقة، واضغط تأكيد.`;
       }
       
-      document.getElementById("formCard").scrollIntoView({ behavior: "smooth" });
+      document.getElementById("formCard").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function sendSpecialToWa() {
@@ -736,9 +735,14 @@
       resetSelectionInternal();
       document.getElementById("formCard").classList.add("hidden-soft");
       document.getElementById("introPanel").classList.remove("hidden-soft");
+      document.getElementById("servicesSection").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    function showMapGuide(type) { document.getElementById("mapGuideModal").classList.remove("hidden-soft"); }
+    function showMapGuide(type) { 
+      // Close other modals if open
+      closeDetailsModal && typeof closeDetailsModal === 'function' && closeDetailsModal();
+      document.getElementById("mapGuideModal").classList.remove("hidden-soft"); 
+    }
     function closeMapModal() { document.getElementById("mapGuideModal").classList.add("hidden-soft"); }
     function confirmMapOpen() {
       closeMapModal();
@@ -854,9 +858,9 @@
           document.getElementById("notes").value = data.notes || "";
           
           showAlert("استرجاع ناجح", "تم استرجاع بيانات الطلب المفتوح بنجاح. يمكنك التعديل عليها الآن.", "✅");
-          document.getElementById("formCard").scrollIntoView({ behavior: "smooth" });
+          document.getElementById("formCard").scrollIntoView({ behavior: "smooth", block: "start" });
         } else {
-          showAlert("تعذر العثور على الطلب", "لم يتم العثور على طلب نشط (قد يكون ملغي أو الرقم خطأ).", "❌");
+          showAlert("تعذر العثور على الطلب", "لم يتم العثور على طلب نشط (قد يكون ملغي أو مغلق، أو الرقم خطأ).", "❌");
           document.getElementById("searchOrderBox").classList.remove("hidden-soft");
         }
       } catch(e) {
@@ -994,6 +998,7 @@
 
           document.getElementById("receiptData").innerHTML = detailsHtml;
           document.getElementById("receipt").classList.remove("hidden-soft");
+          document.getElementById("receipt").scrollIntoView({ behavior: "smooth", block: "start" });
           
           let waMsg = `*تفاصيل الأوردر* 🚚\n\n*رقم الطلب:* ${finalId}\n*العميل:* ${name}\n*الهاتف:* ${phone} ${altPhone? `\n*بديل:* ${altPhone}`:''}\n*مكان التسليم:* ${payload.address}\n${payload.pickupAddress? `*مكان الاستلام:* ${payload.pickupAddress}\n`:''}${actionType==='new_order'? `*الدفع:* ${payload.payment} (عربون: ${payload.depositAmount})\n`:''}*الخدمة:* ${actionType==='cancel_order'?'إلغاء الطلب ❌':payload.source}\n*الملاحظات:* ${payload.notes}\n*كود الموظف:* ${loggedInEmpCode}`;
           
